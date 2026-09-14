@@ -1,0 +1,102 @@
+:root {
+  color-scheme: light;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f4f7fb;
+  color: #152033;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+main {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.card {
+  width: min(640px, 100%);
+  padding: 40px;
+  border: 1px solid #dbe4f0;
+  border-radius: 20px;
+  background: #ffffff;
+  box-shadow: 0 20px 60px rgba(31, 53, 85, 0.1);
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  color: #3867d6;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(2rem, 6vw, 3rem);
+  line-height: 1.05;
+}
+
+.description {
+  margin: 18px 0 28px;
+  color: #52627a;
+  line-height: 1.6;
+}
+
+.status {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 16px;
+  border-radius: 12px;
+}
+
+.status strong,
+.status p {
+  display: block;
+  margin: 0;
+}
+
+.status p {
+  margin-top: 4px;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.statusDot {
+  width: 10px;
+  height: 10px;
+  margin-top: 4px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+}
+
+.statusLoading {
+  color: #52627a;
+  background: #eef2f7;
+}
+
+.statusOk {
+  color: #12653a;
+  background: #e8f8ef;
+}
+
+.statusOk .statusDot {
+  background: #25a55f;
+}
+
+.statusError {
+  color: #9b2c2c;
+  background: #fff0f0;
+}
+
+.statusError .statusDot {
+  background: #d64545;
+}

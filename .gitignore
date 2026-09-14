@@ -12,6 +12,7 @@ out/
 
 # Test coverage
 coverage/
+*.tsbuildinfo
 
 # Logs
 *.log
