@@ -54,16 +54,14 @@ A aplicação estará disponível em `http://localhost:3000`.
 - `npm run db:migrate`: cria e aplica migrations no desenvolvimento.
 - `npm run db:deploy`: aplica migrations existentes.
 
-## Regras de negócio
+## Regras de negócio e escopo
 
-Ao implementar funcionalidades, respeite estas regras:
+Consulte `docs/PRD.md` como fonte de verdade para as regras de negócio e os
+limites da primeira versão. Não implemente itens fora do escopo sem solicitação
+explícita.
 
-- Cada pessoa pode ter no máximo três equipamentos emprestados.
-- O prazo padrão de devolução é de 14 dias.
-- Pessoas com itens atrasados não podem solicitar novos empréstimos.
-- Equipamentos em manutenção não podem aparecer como disponíveis.
-- Cada pessoa deve visualizar somente os próprios empréstimos.
-- Usuários de Operações podem visualizar todos os empréstimos em aberto.
+Sem solicitação explícita, não separe o frontend e o backend em aplicações
+diferentes nem troque o PostgreSQL por outro banco.
 
 ## Padrões de desenvolvimento
 
@@ -104,16 +102,6 @@ execução.
 - Verifique autenticação e autorização nas rotas protegidas.
 - Não confie somente nas validações feitas pela interface.
 
-## Limites da primeira versão
-
-Não implemente sem solicitação explícita:
-
-- Reservas para datas futuras.
-- Notificações por e-mail.
-- Importação da planilha antiga.
-- Separação do frontend e backend em aplicações diferentes.
-- Troca do PostgreSQL por outro banco.
-
 ## Orientações para agentes
 
 Ao trabalhar neste projeto:
@@ -127,3 +115,13 @@ Ao trabalhar neste projeto:
 7. Informe quais arquivos foram alterados.
 8. Explique como a alteração foi verificada.
 9. Avise sobre limitações ou verificações que não puderam ser executadas.
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->

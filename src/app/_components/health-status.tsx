@@ -41,19 +41,19 @@ export function HealthStatus() {
   }, []);
 
   if (!health) {
-    return <p className="status statusLoading">Verificando o PostgreSQL...</p>;
+    return <p className="status statusLoading" role="status">Verificando a conexão com o PostgreSQL...</p>;
   }
 
   const connected = health.status === "ok";
 
   return (
-    <div className={`status ${connected ? "statusOk" : "statusError"}`}>
+    <div className={`status ${connected ? "statusOk" : "statusError"}`} role="status">
       <span className="statusDot" aria-hidden="true" />
       <div>
-        <strong>{connected ? "Sistema disponivel" : "Sistema indisponivel"}</strong>
+        <strong>{connected ? "Sistema disponível" : "Sistema indisponível"}</strong>
         <p>
           {connected
-            ? "O endpoint /health confirmou a conexao com o PostgreSQL."
+            ? "A aplicação está conectada ao PostgreSQL."
             : health.message}
         </p>
       </div>
