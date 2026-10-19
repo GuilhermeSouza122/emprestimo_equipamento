@@ -82,3 +82,13 @@ h2 { margin-bottom: 0; font-size: clamp(2.5rem, 4vw, 4.15rem); line-height: 1.12
   .system-section { padding: 27px 23px; margin-bottom: 70px; }.status { width: 100%; }.site-footer { flex-wrap: wrap; justify-content: space-between; padding-block: 25px; }.site-footer p { order: 3; width: 100%; }
 }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; }.button, .step-card { transition: none; } }
+
+.header-actions { display: flex; align-items: center; gap: 12px; }
+.header-login { display: inline-flex; align-items: center; justify-content: center; gap: 12px; min-height: 43px; padding: 11px 18px; border-radius: 10px; background: #6451c7; color: #fff; font-size: .85rem; font-weight: 700; white-space: nowrap; }
+.header-login:hover { background: #5342b3; }
+@media (max-width: 600px) {
+  .header-actions { gap: 8px; }
+  .header-status-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
+  .header-status-link { padding: 11px 13px; }
+  .header-login { font-size: .78rem; padding: 11px 14px; }
+}
