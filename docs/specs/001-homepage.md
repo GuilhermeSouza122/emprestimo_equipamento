@@ -1,0 +1,26 @@
+# Spec 001 — Homepage
+
+## Objetivo
+
+Apresentar o sistema de empréstimo de equipamentos a colaboradores e Operações
+enquanto login, catálogo e empréstimo ainda não foram implementados.
+
+## Escopo
+
+- Explicar o propósito do produto e o fluxo de consulta, solicitação e devolução.
+- Mostrar as quatro regras definidas no PRD.
+- Mostrar o estado real da conexão com PostgreSQL pelo componente existente.
+- Oferecer navegação interna e layout responsivo.
+
+## Critérios de aceitação
+
+- **CA-01:** `/` mostra nome, propósito e passos do empréstimo.
+- **CA-02:** a página apresenta limite de três itens, prazo de 14 dias,
+  bloqueio por atraso e indisponibilidade de itens em manutenção.
+- **CA-03:** a área de estado reflete `/health`, inclusive em caso de falha,
+  sem exibir equipamentos ou números fictícios.
+- **CA-04:** links levam a seções existentes e a página funciona em celular.
+
+## Fora de escopo
+
+Login, catálogo real, solicitação, devolução e tela operacional.
