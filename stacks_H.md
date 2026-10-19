@@ -1,7 +1,13 @@
-# Stack — base para o ADR-001 (turma B)
+# Stack — rascunho histórico (turma B)
 
-Documento de trabalho. Serve de insumo para `docs/adr/001-stack.md`.
-Cada item tem escolha e uma linha de justificativa, no formato que o ADR espera.
+**Status:** referência histórica, não vigente após confirmação do ADR-001 em
+2026-10-02. Este documento preserva propostas consideradas; não autoriza
+instalar dependências, criar tenants, adotar Supabase ou executar comandos.
+
+A stack vigente está em [ADR-001](docs/adr/001-stack.md), o layout inicial em
+[ADR-002](docs/adr/002-desing_system.md) e o estado implementado no [README](README.md).
+As escolhas abaixo que divergem desses documentos não foram adotadas. Exemplos
+de chamados, ativos, importação e e-mail não ampliam o escopo do PRD.
 
 ---
 
@@ -150,8 +156,8 @@ Cada item tem escolha e uma linha de justificativa, no formato que o ADR espera.
 - **`@supabase/ssr` com cookie `httpOnly`** — como front e servidor estão na mesma origem, o cookie funciona mesmo em `*.vercel.app`, e o token nunca fica legível por JavaScript. É a vantagem concreta do monolito nesse projeto.
 - **Middleware renovando a sessão** — sem ele o token expira no meio da navegação e o usuário é deslogado sem motivo aparente.
 - **Middlewares do tRPC em vez de biblioteca de permissão** — as regras são "está logado", "pertence ao tenant" e "é administrador"; encadear três middlewares resolve isso sem introduzir uma camada de definição de política para aprender.
-- **Autorização no servidor, não no RLS** — o Prisma conecta com um role dono das tabelas, que **bypassa RLS por padrão**. Fazer as policies valerem exigiria abrir transação com `SET LOCAL role` e `SET LOCAL request.jwt.claims` a cada request, com custo de transação por chamada e atrito com o pooler.
-- **RLS ligado mesmo assim** — se uma credencial vazar ou um procedimento esquecer o middleware, a policy é a última barreira entre tenants. Deny by default garante que tabela nova nasce fechada.
+- **Autorização no servidor, não no RLS** — esta proposta pressupunha que o Prisma conectaria com um role dono das tabelas, que normalmente ignora RLS. Isso depende do role de conexão, não é uma propriedade automática do Prisma. Para usar policies como barreira efetiva seria necessário definir um acesso sujeito a RLS e validar seu contexto de autorização.
+- **Limite do RLS nesta proposta** — RLS pode restringir acessos de roles sujeitos às policies, mas não protege uma consulta usando superuser, `BYPASSRLS` ou o proprietário que normalmente ignora RLS. Portanto, ligar RLS não corrige a ausência de middleware no acesso privilegiado descrito acima nem protege contra vazamento dessa credencial. A autorização no servidor continua necessária. Referência: [PostgreSQL 16 — Row Security Policies](https://www.postgresql.org/docs/16/ddl-rowsecurity.html).
 
 ---
 
@@ -246,7 +252,7 @@ Cada item tem escolha e uma linha de justificativa, no formato que o ADR espera.
 | GraphQL | Custo de schema, resolver e cache não se paga no volume de telas atual |
 | Server Actions para mutação | Segundo caminho de mutação, com outra validação e outra checagem de permissão |
 | Server Components buscando dado direto no Prisma | Segundo caminho de leitura, com a checagem de tenant duplicada em outro lugar |
-| RLS como autorização primária | O Prisma bypassa RLS por padrão; fazer valer exigiria transação com `SET LOCAL` a cada request |
+| RLS como autorização primária neste acesso privilegiado | O role de conexão proposto ignora RLS; usar policies efetivamente exigiria mudar e validar o acesso |
 | Acesso a dado pelo cliente do Supabase em vez do Prisma | Deixaria RLS como autorização, mas espalharia o acesso a dado em dois caminhos e tiraria o tipo do Prisma de dentro do tRPC |
 | Cadastro aberto por e-mail | Sem domínio corporativo para filtrar, qualquer pessoa com a URL criaria conta |
 | SSO corporativo (OIDC/SAML) | Não há e-mail corporativo para federar |

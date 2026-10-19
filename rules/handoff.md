@@ -24,8 +24,8 @@ pessoa ou agente.
 
 ## Segurança e escopo
 
-- Nunca inclua segredos, tokens, valores de `.env` ou dados pessoais.
-- Não declare a tarefa concluída se algum check obrigatório falhou ou não foi
-  executado; explique a situação claramente.
-- Confirme que `git status --short` contém apenas arquivos relacionados à
-  tarefa.
+- Respeite os limites de segurança de `rules/restrictions.md`.
+- Distinga implementação aplicada de verificação completa, conforme
+  `rules/checks.md`; registre separadamente checks aprovados, falhos e pendentes.
+- Informe mudanças da tarefa e alterações preexistentes relevantes, sem exigir
+  que o usuário limpe seu trabalho nem atribuir a si arquivos que já existiam.

@@ -10,10 +10,10 @@ alwaysApply: true
 
 ## Base arquitetural
 
-- Siga o ADR-001: use Vitest, teste os procedimentos tRPC e mantenha o
-  PostgreSQL como banco de integração.
-- Não substitua o Prisma Client por SQL direto nem crie um contrato REST
-  paralelo sem uma nova decisão arquitetural.
+- Use a stack de testes do ADR-001 aceito e os procedimentos existentes; não
+  adicione ferramentas previstas apenas em rascunhos.
+- `/health` é um endpoint HTTP operacional existente, não um contrato REST
+  paralelo para funcionalidades de produto. Teste seu status e corpo de resposta.
 
 ## Antes de implementar
 
@@ -25,20 +25,14 @@ alwaysApply: true
 ## Regras obrigatórias
 
 - Não remova testes para fazer a suíte passar.
-- Não use credenciais reais nem banco remoto nos testes.
-- Cubra cenários de sucesso, validação, autorização e falha esperada.
-- Para empréstimos, valide limite de três itens, prazo de 14 dias, atraso,
-  disponibilidade e isolamento entre usuários.
-- Para autenticação, valide sessão no servidor, cookie HTTP-only e autorização
-  por papel (`colaborador` ou `operacoes`) nas rotas protegidas.
+- Destino do banco e cuidados com dados de teste seguem `rules/checks.md`.
+- Cubra sucesso, validação e falha esperada no escopo afetado; em fluxos
+  protegidos, também cubra autenticação, autorização e isolamento entre usuários.
+- Derive cenários e limites de `docs/PRD.md` e da spec aprovada, sem manter uma
+  segunda lista normativa de regras de negócio neste arquivo.
+- Para autenticação, derive os casos do modelo de sessão e papéis do ADR-001.
 
 ## Verificação
 
-Execute, quando aplicável:
-
-1. `npm run lint`
-2. `npm test`
-3. `npm run build`
-
-Na entrega, informe os comandos executados, o resultado e qualquer verificação
-que não pôde ser executada.
+Os comandos obrigatórios e as exceções documentais estão em `rules/checks.md`.
+O relato de resultados e limitações segue `rules/handoff.md`.

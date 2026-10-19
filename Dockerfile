@@ -3,10 +3,9 @@ FROM node:20.19-alpine
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-RUN npm ci
-
 COPY prisma ./prisma
-RUN DATABASE_URL="postgresql://postgres:postgres@localhost:5432/emprestimo_equipamento?schema=public" npx prisma generate
+# O postinstall gera o Prisma Client e precisa do schema antes de npm ci.
+RUN npm ci
 
 COPY . .
 RUN DATABASE_URL="postgresql://postgres:postgres@localhost:5432/emprestimo_equipamento?schema=public" npm run build

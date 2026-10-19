@@ -1,38 +1,86 @@
-# Emprestimo de equipamentos
+# Empréstimo de equipamentos
 
-Fatia zero do sistema interno descrito em `docs/PRD.md`. Este estado prova a
-comunicacao entre uma pagina Next.js, o endpoint `GET /health` e o PostgreSQL,
-sem implementar funcionalidades de produto.
+Sistema interno descrito em [PRD](docs/PRD.md). A stack aprovada está no
+[ADR-001](docs/adr/001-stack.md) e a apresentação inicial no
+[ADR-002](docs/adr/002-desing_system.md).
 
-## Subir aplicacao e banco
+## Estado implementado
+
+- Homepage informativa e responsiva conforme [Spec 001](docs/specs/001-homepage.md).
+- Endpoint operacional `GET /health`, consultado pela homepage, e integração
+  com PostgreSQL via Prisma.
+- Migration inicial e teste de integração do endpoint de saúde com Vitest.
+- Aplicação e banco configurados para Docker Compose.
+
+Login, sessões, procedimentos tRPC, catálogo e fluxos reais de empréstimo,
+devolução e Operações ainda não estão implementados. Aprovação da stack não
+significa que esses fluxos já funcionam.
+
+## Preparar o ambiente
+
+Requisitos: Node.js 20.19 ou superior compatível com a versão instalada do Next,
+npm e PostgreSQL; para execução em containers, Docker com Compose em funcionamento.
+
+Antes de qualquer comando de execução, copie `.env.example` para `.env` e
+ajuste somente seu ambiente local. Não versione credenciais reais.
+
+### Aplicação e banco em containers
 
 ```bash
 docker compose up --build
 ```
 
-Acesse `http://localhost:3000`. O endpoint de saude fica em
-`http://localhost:3000/health`. O PostgreSQL deste projeto e exposto em
-`localhost:55432` para nao conflitar com as instancias que ja usam as portas
-`5432` e `5433` nesta maquina.
+O Dockerfile copia o schema antes de instalar dependências; o `postinstall`
+gera o Prisma Client. Na inicialização do container, Prisma aplica migrations
+existentes antes de iniciar a aplicação. Este é o fluxo local, não uma decisão
+sobre deploy em produção.
 
-## Rodar os testes
+A aplicação usa `http://localhost:3000` e `/health` nessa mesma origem. Por padrão,
+PostgreSQL fica em `localhost:55432` para evitar conflitos com outros bancos.
+`APP_PORT` e `POSTGRES_PORT` podem sobrescrever as portas; dentro do Compose, a
+aplicação conecta ao serviço `db` na porta 5432.
 
-Com o banco do Compose em execucao:
+### Aplicação no Node.js e banco local ou no Compose
 
 ```bash
 npm install
-npm test
-```
-
-## Comandos locais
-
-```bash
+docker compose up -d db
+npm run db:deploy
 npm run dev
-npm run build
-npm run lint
-npm test
-npm run db:migrate
 ```
 
-Copie `.env.example` para `.env` antes da execucao local. O `.env` real e
-ignorado pelo Git.
+Se já houver PostgreSQL local configurado em `DATABASE_URL`, não é necessário
+subir o serviço `db`. `npm install` gera o Prisma Client automaticamente.
+
+## Comandos disponíveis
+
+| Comando | Efeito |
+|---|---|
+| `npm run dev` | Inicia Next.js em desenvolvimento |
+| `npm run build` | Gera a versão de produção |
+| `npm start` | Serve uma versão já construída |
+| `npm run lint` | Executa ESLint |
+| `npm test` | Aplica migrations existentes e executa Vitest uma vez |
+| `npm run test:watch` | Executa Vitest em observação; não aplica migrations |
+| `npm run db:generate` | Gera Prisma Client a partir do schema |
+| `npm run db:migrate` | Cria/aplica migrations de desenvolvimento; pode solicitar reset em caso de divergência |
+| `npm run db:deploy` | Aplica migrations existentes, sem gerar novas |
+
+Não confirme um reset solicitado pelo Prisma sem autorização sobre o banco alvo.
+
+## Testes e verificações
+
+Para `npm test`, PostgreSQL deve estar disponível e `DATABASE_URL` deve apontar
+para um banco local, nunca remoto ou de produção. O teste atual lê o registro
+de saúde, mas o comando aplica migrations; confira o destino antes de executar.
+Testes futuros com fixtures de escrita precisam de banco local dedicado.
+
+Os checks obrigatórios por tipo de alteração estão em [rules/checks.md](rules/checks.md).
+Docker parado impede verificar a construção e execução dos containers, mas
+`docker compose config --quiet` ainda pode validar a configuração.
+
+## Instruções do projeto
+
+[AGENTS.md](AGENTS.md) é o ponto de entrada para as regras e define a autoridade
+dos documentos. `stacks_H.md` e os HTMLs das aulas são material de referência,
+não a stack vigente nem comandos a executar automaticamente.

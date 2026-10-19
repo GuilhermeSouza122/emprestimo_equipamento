@@ -7,26 +7,42 @@ alwaysApply: true
 # Verificação de fim de tarefa
 > leitor: agente
 
-## Quando
-Sempre que você for dizer "pronto", "implementado" ou "funcionando".
+Esta é a fonte dos checks obrigatórios; outros documentos devem apontar aqui.
 
-## Procedimento
-1. Rode <COMANDO-TESTES>. Cole a última linha da saída na resposta.
-2. Se a tarefa tocou em migration, rode `supabase db reset` local e
-   confirme que o banco sobe do zero com todas as migrations.
-3. Rode <COMANDO-BUILD> antes de qualquer push. Build que quebra na
-   Vercel é o feedback mais lento e mais caro deste projeto.
-4. Rode `git status --short`. Só podem aparecer arquivos do escopo
-   da tarefa.
-5. Diga qual critério de aceitação (CA-xx) esta tarefa atende.
+## Conforme o tipo de alteração
 
-## Verificação
-Pronto = os quatro comandos terminaram sem falha E o git status não
-trouxe surpresa. As duas coisas, não uma.
+| Alteração | Verificação obrigatória |
+|---|---|
+| Somente documentação ou regras | Revisar referências, consistência e `git diff --check` |
+| Código, dependências ou configuração de execução | `npm run lint`, `npm test`, `npm run build` e `git diff --check` |
+| Dockerfile ou Compose | Checks de execução acima, `docker compose config --quiet` e build da imagem |
+| Schema ou migrations | Checks de execução e aplicação de todas as migrations em banco local vazio e descartável |
 
-## Não faça
-- Não relate sucesso parcial. Teste vermelho é tarefa não terminada,
-  mesmo que o código "esteja certo".
-- Não tente consertar a mesma falha duas vezes seguidas sem me mostrar
-  a saída do erro.
-- Não rode teste contra o banco remoto.
+Em tarefa mista, execute a união dos checks aplicáveis. Mudanças em uma skill
+também exigem validar seu frontmatter e referências.
+Se dependências ou lockfile mudarem, execute `npm audit --audit-level=high`;
+alertas altos/críticos exigem correção ou decisão explícita, não atualização forçada.
+
+## Banco e infraestrutura
+
+- O projeto usa Prisma Migrate, não Supabase CLI. `npm test` aplica migrations
+  com Prisma e usa `DATABASE_URL`; confira o destino antes de executá-lo.
+- Não teste em banco remoto ou de produção. Para fixtures que escrevem dados,
+  use banco local dedicado e limpeza limitada aos dados do teste.
+- Verificar migrations do zero exige um banco descartável separado; não resete
+  o banco existente nem exclua volumes. Remoções seguem `rules/restrictions.md`.
+- Se faltar banco, Docker ou outra dependência, registre o check como pendente,
+  a causa e o comando necessário. Não trate check não executado como aprovado.
+
+## Git e conclusão
+
+1. Registre `git status --short` antes da tarefa.
+2. Ao terminar, revise o diff e compare o status com esse estado inicial.
+3. Preserve alterações e arquivos preexistentes; identifique apenas o que a
+   tarefa acrescentou ou modificou, inclusive arquivos novos não cobertos pelo diff.
+4. Relacione a entrega aos critérios da spec ou, em manutenção, ao plano aprovado.
+
+Uma tarefa está verificada quando todos os checks aplicáveis passam. É permitido
+relatar correções aplicadas com verificações pendentes, desde que isso fique
+explícito e não seja apresentado como sucesso completo. Mostre falhas relevantes
+sem segredos e investigue a causa antes de repetir a mesma tentativa.

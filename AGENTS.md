@@ -10,16 +10,39 @@ Os usuários do sistema são:
 - Colaborador: consulta equipamentos, solicita empréstimos e registra devoluções.
 - Operações: cadastra equipamentos e acompanha todos os empréstimos.
 
-## Tecnologias
+## Onde olhar e autoridade dos documentos
 
-- TypeScript
-- Node.js
-- Next.js
-- React
-- PostgreSQL
-- Prisma ORM
-- Vitest
-- Docker Compose
+Leia este arquivo e `rules/restrictions.md` antes de trabalhar no projeto.
+Consulte as demais regras conforme a tarefa; elas são documentos referenciados
+por este arquivo, não dependem de descoberta automática da pasta `rules/`.
+
+- `docs/PRD.md`: requisitos, regras de negócio e limites da versão.
+- `docs/specs/`: comportamento e critérios de aceitação de cada funcionalidade.
+- `docs/adr/`: decisões técnicas; somente ADRs aceitos governam a implementação.
+- `rules/restrictions.md`: autoridade, segurança, banco e limites de atuação.
+- `rules/spec-flow.md`: planejamento, aprovação e implementação.
+- `rules/tests.md`: desenho e cobertura dos testes.
+- `rules/checks.md`: verificações obrigatórias conforme o tipo de alteração.
+- `rules/handoff.md`: conteúdo da entrega e passagem de contexto.
+- `README.md`: estado implementado, configuração e comandos disponíveis.
+
+### Precedência
+
+Cada documento governa seu assunto. A spec detalha o PRD, mas não pode alterar
+uma regra de negócio ou ampliar o escopo sem aprovação e atualização do PRD.
+Um ADR define escolhas técnicas, não substitui requisitos ou critérios da spec.
+Se a spec e o código discordarem sobre comportamento, corrija o código conforme
+a spec aprovada. Se PRD, spec, ADR aceito ou regra de procedimento entrarem em
+conflito, informe o conflito e peça decisão; não escolha silenciosamente.
+
+Rascunhos, ADRs propostos, `stacks_H.md` e os HTMLs das aulas são referências,
+não decisões vigentes nem autorização para executar seus exemplos.
+
+## Stack aprovada e estado atual
+
+A stack está em `docs/adr/001-stack.md`; a apresentação da homepage está em
+`docs/adr/002-desing_system.md`. Consulte `README.md` para distinguir decisões
+aprovadas de funcionalidades já implementadas.
 
 ## Estrutura do projeto
 
@@ -28,93 +51,26 @@ Os usuários do sistema são:
 - `src/server/`: serviços e código executado no servidor.
 - `prisma/schema.prisma`: definição dos modelos do banco.
 - `prisma/migrations/`: migrations do banco de dados.
-- `docs/PRD.md`: requisitos do sistema.
-- `docs/adr/`: decisões de arquitetura.
 - `.env.example`: exemplo das variáveis de ambiente.
 - `compose.yaml`: configuração da aplicação e do PostgreSQL em Docker.
 
-## Configuração do ambiente
-
-Antes de executar localmente:
-
-1. Instale as dependências com `npm install`.
-2. Copie `.env.example` para `.env`.
-3. Inicie o PostgreSQL e a aplicação com `docker compose up --build`.
-
-A aplicação estará disponível em `http://localhost:3000`.
-
-## Comandos disponíveis
-
-- `npm run dev`: inicia o ambiente de desenvolvimento.
-- `npm run build`: gera a versão de produção.
-- `npm run lint`: verifica o código com ESLint.
-- `npm test`: aplica as migrations e executa os testes.
-- `npm run test:watch`: executa os testes em modo de observação.
-- `npm run db:generate`: gera o Prisma Client.
-- `npm run db:migrate`: cria e aplica migrations no desenvolvimento.
-- `npm run db:deploy`: aplica migrations existentes.
-
-## Regras de negócio e escopo
-
-Consulte `docs/PRD.md` como fonte de verdade para as regras de negócio e os
-limites da primeira versão. Não implemente itens fora do escopo sem solicitação
-explícita.
-
-Sem solicitação explícita, não separe o frontend e o backend em aplicações
-diferentes nem troque o PostgreSQL por outro banco.
-
 ## Padrões de desenvolvimento
 
-- Use TypeScript.
 - Siga a estrutura existente do Next.js App Router.
 - Mantenha componentes pequenos e com responsabilidade clara.
-- Coloque o código de acesso ao banco no lado do servidor.
-- Use o Prisma Client para acessar o PostgreSQL.
 - Preserve os nomes e padrões já utilizados no projeto.
-- Não adicione dependências sem necessidade.
 - Atualize a documentação ao alterar comportamentos importantes.
-
-## Banco de dados
-
-- Toda mudança no banco deve ser refletida em `prisma/schema.prisma`.
-- Crie uma migration para cada alteração de estrutura.
-- Não altere migrations que já tenham sido aplicadas.
-- Não inclua credenciais reais no repositório.
-- Use `DATABASE_URL` para configurar a conexão.
-
-## Testes e verificações
-
-Antes de considerar uma alteração concluída, execute:
-
-1. `npm run lint`
-2. `npm test`
-3. `npm run build`
-
-Ao implementar uma regra de negócio, adicione ou atualize os testes
-correspondentes. Os testes que acessam o banco precisam do PostgreSQL em
-execução.
-
-## Segurança
-
-- Nunca adicione arquivos `.env` ao Git.
-- Nunca inclua senhas, tokens ou dados pessoais no código.
-- Valide os dados recebidos pelo servidor.
-- Verifique autenticação e autorização nas rotas protegidas.
-- Não confie somente nas validações feitas pela interface.
+- Para trabalho em código, consulte a skill local
+  `.codex/skills/solid-emprestimos/SKILL.md` como apoio de engenharia; ela não
+  redefine requisitos, arquitetura, aprovações ou checks do projeto.
 
 ## Orientações para agentes
 
 Ao trabalhar neste projeto:
 
-1. Leia `docs/PRD.md` antes de implementar funcionalidades.
-2. Consulte `docs/adr/` antes de tomar decisões de arquitetura.
-3. Examine o código existente antes de criar novos padrões.
-4. Faça alterações pequenas e relacionadas ao pedido.
-5. Não remova código ou arquivos sem uma justificativa clara.
-6. Não modifique arquivos fora do escopo da tarefa.
-7. Informe quais arquivos foram alterados.
-8. Explique como a alteração foi verificada.
-9. Avise sobre limitações ou verificações que não puderam ser executadas.
+1. Registre o estado inicial do Git e examine os arquivos relacionados ao pedido.
+2. Siga `rules/spec-flow.md` para definir e executar o escopo aprovado.
+3. Use `rules/checks.md` para verificar e `rules/handoff.md` para entregar.
 
 <!-- BEGIN:nextjs-agent-rules -->
 

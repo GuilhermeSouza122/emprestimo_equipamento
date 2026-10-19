@@ -8,27 +8,31 @@ alwaysApply: true
 
 > leitor: agente
 
-Toda funcionalidade deve seguir este fluxo:
+## Funcionalidades
 
 1. Leia `docs/PRD.md` e os arquivos relevantes em `docs/adr/`.
-   Para decisões de stack, consulte especialmente `docs/adr/001-stack.md`.
+   Use a autoridade dos documentos definida em `AGENTS.md`.
 2. Transforme o pedido em uma spec curta em `docs/specs/`, com objetivo,
    escopo, critérios de aceitação e casos de erro.
-3. Mostre o plano e aguarde aprovação antes de escrever código de
-   funcionalidade.
+3. Mostre a spec e o plano com etapas verificáveis e aguarde aprovação antes
+   de escrever código de funcionalidade.
 4. Implemente somente o escopo aprovado, preservando os padrões existentes.
-5. Atualize testes para os critérios de aceitação e execute os checks do
-   projeto.
-6. Faça o handoff com arquivos, decisões, verificações e limitações.
+5. Atualize os testes conforme `rules/tests.md` e verifique conforme
+   `rules/checks.md`.
+6. Entregue conforme `rules/handoff.md`.
 
-## Regras de decisão
+## Aprovação e execução
 
-- Se o PRD estiver ambíguo, registre a pergunta; não invente comportamento.
-- Se houver conflito com um ADR ou spec, pare e informe o conflito.
-- Preserve a arquitetura do ADR-001: Next.js full-stack, tRPC, Prisma Client,
-  Prisma Migrate, PostgreSQL, Vitest e sessão persistida no servidor.
-- Verifique o papel (`colaborador` ou `operacoes`) nas rotas protegidas e não
-  exponha autorização apenas no cliente.
-- Mudanças de banco exigem atualização do schema e uma nova migration.
-- Não inclua reservas futuras, notificações por e-mail ou importação da
-  planilha sem solicitação explícita.
+- Aprovação explícita do plano autoriza suas etapas dentro do escopo descrito;
+  não exige nova confirmação a cada pequena alteração.
+- Se o usuário autorizar somente uma etapa ou pedir acompanhamento etapa a
+  etapa, respeite esse limite e pare no ponto combinado.
+- Pergunte antes de resolver ambiguidade de negócio, mudar arquitetura ou
+  ampliar o escopo. Ações destrutivas ou externas seguem `rules/restrictions.md`.
+- Informe progresso e obstáculos sem transformar resultado parcial em conclusão.
+
+## Manutenção
+
+Correções documentais, de regras ou de configuração sem mudança de comportamento
+de produto podem seguir um plano aprovado sem criar uma spec de funcionalidade.
+Uma correção de comportamento deve seguir ou atualizar a spec correspondente.

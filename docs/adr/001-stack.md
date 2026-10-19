@@ -1,8 +1,12 @@
 # ADR-001 — Stack do projeto
 
-**Status:** proposto para validação da equipe  
+**Status:** aceito, confirmado pelo usuário em 2026-10-02
+
 **Contexto do produto:** [docs/PRD.md](../PRD.md)  
 **Data:** 2026-08-31
+
+A aceitação registra a stack escolhida, não afirma que todas as peças já estão
+implementadas. O estado executável está documentado no README.
 
 ## Contexto
 
@@ -21,9 +25,9 @@ caminho.
 |---|---|
 | Linguagem / runtime do backend | TypeScript sobre Node.js |
 | Framework do backend | Next.js full-stack |
-| Estilo e formato da API | tRPC com tipos compartilhados entre front e back |
+| Estilo e formato da API | tRPC com tipos compartilhados para funcionalidades de produto; `/health` permanece um endpoint HTTP operacional |
 | Front | React/Next.js com TypeScript e etapa de build |
-| Como o front é servido | Pelo mesmo processo do backend |
+| Como o front é servido | Pelo mesmo servidor Next.js na execução Node.js local e em Docker |
 | Arquitetura | Monólito modular |
 | Autenticação | E-mail e senha; sessão no servidor identificada por cookie HTTP-only e persistida no PostgreSQL |
 | Autorização | Papel (`colaborador` ou `operacoes`) armazenado no usuário e verificado nas rotas protegidas |
@@ -100,7 +104,7 @@ caminho.
   etapa de build; o contrato tRPC acopla o front ao servidor; e a sessão
   persistida exige cuidado com expiração e limpeza.
 - **O que fica impedido sem custo de mudança:** não podemos trocar o banco,
-  separar o front em outro deploy, adotar um cliente React ou mudar o modelo de
+  separar o front em outro deploy, substituir React/Next.js ou mudar o modelo de
   autenticação sem revisar este ADR, a configuração e os testes.
 
 ## O que este ADR NÃO decide
@@ -110,3 +114,10 @@ de módulos, o desenho visual das telas, o modelo detalhado das tabelas, os
 endpoints específicos, as regras de negócio que o PRD deixou em aberto nem a
 ordem de implementação das funcionalidades. Essas decisões serão registradas
 nos artefatos apropriados e, quando forem arquiteturais, em ADRs posteriores.
+
+## Relação com os rascunhos
+
+`stacks_H.md` é material histórico, não uma extensão deste ADR. Supabase Auth,
+multi-tenancy, Tailwind e shadcn/ui não foram adotados por esta decisão. A homepage
+mantém o CSS próprio registrado no ADR-002. Hospedagem em produção permanece uma
+decisão futura; não se presume Vercel ou um provedor de PostgreSQL gerenciado.
