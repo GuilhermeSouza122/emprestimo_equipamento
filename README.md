@@ -7,12 +7,15 @@ Sistema interno descrito em [PRD](docs/PRD.md). A stack aprovada está no
 ## Estado implementado
 
 - Homepage informativa e responsiva conforme [Spec 001](docs/specs/001-homepage.md).
+- Interface de login em `/login`, acessível pelo botão "Entrar" da homepage,
+  conforme [Spec 002](docs/specs/002-tela-login.md). Tem validação local e controle
+  de visibilidade da senha, mas não envia credenciais nem autentica usuários.
 - Endpoint operacional `GET /health`, consultado pela homepage, e integração
   com PostgreSQL via Prisma.
 - Migration inicial e teste de integração do endpoint de saúde com Vitest.
 - Aplicação e banco configurados para Docker Compose.
 
-Login, sessões, procedimentos tRPC, catálogo e fluxos reais de empréstimo,
+Autenticação real, sessões, procedimentos tRPC, catálogo e fluxos reais de empréstimo,
 devolução e Operações ainda não estão implementados. Aprovação da stack não
 significa que esses fluxos já funcionam.
 

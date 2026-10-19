@@ -1,3 +1,6 @@
+import Link from "next/link";
+
+import { Brand } from "./_components/brand";
 import { HealthStatus } from "./_components/health-status";
 
 const steps = [
@@ -17,16 +20,16 @@ export default function Home() {
   return (
     <div className="site-shell" id="inicio">
       <header className="site-header">
-        <a className="brand" href="#inicio" aria-label="Equipar, voltar ao início">
-          <span className="brand-mark" aria-hidden="true"><span /><span /><span /><span /></span>
-          <span>equipar<span className="brand-period">.</span></span>
-        </a>
+        <Brand href="#inicio" />
         <nav className="site-nav" aria-label="Navegação principal">
           <a href="#como-funciona">Como funciona</a>
           <a href="#regras">Regras</a>
           <a href="#operacoes">Operações</a>
         </nav>
-        <a className="header-link" href="#sistema">Estado do sistema <span aria-hidden="true">↗</span></a>
+        <div className="header-actions">
+          <a className="header-link header-status-link" href="#sistema" aria-label="Estado do sistema"><span className="header-status-label">Estado do sistema</span> <span aria-hidden="true">↗</span></a>
+          <Link className="header-login" href="/login">Entrar <span aria-hidden="true">↗</span></Link>
+        </div>
       </header>
 
       <main>
@@ -98,7 +101,7 @@ export default function Home() {
       </main>
 
       <footer className="site-footer">
-        <a className="brand" href="#inicio" aria-label="Equipar, voltar ao início"><span className="brand-mark" aria-hidden="true"><span /><span /><span /><span /></span><span>equipar<span className="brand-period">.</span></span></a>
+        <Brand href="#inicio" />
         <p>Empréstimo de equipamentos internos.</p>
         <a href="#inicio">Voltar ao início ↑</a>
       </footer>
