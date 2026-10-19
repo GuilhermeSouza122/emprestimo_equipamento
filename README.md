@@ -79,6 +79,31 @@ Os checks obrigatórios por tipo de alteração estão em [rules/checks.md](rule
 Docker parado impede verificar a construção e execução dos containers, mas
 `docker compose config --quiet` ainda pode validar a configuração.
 
+## Build na Vercel
+
+O [vercel.json](vercel.json) identifica a aplicação como Next.js, executa
+`npm run build` e deixa a saída sob o padrão do framework (`outputDirectory:
+null`), em vez de exigir uma pasta estática `public`.
+
+Em Project Settings → Build and Deployment, confira:
+
+- Framework Preset: Next.js.
+- Root Directory: raiz do repositório (`.`), onde está este `package.json`.
+- Build Command: `npm run build`.
+- Output Directory: desative o Override; não configure `public`.
+
+Esses ajustes exigem um novo deploy para ter efeito. O commit usado precisa
+conter `vercel.json`; repetir um deploy de um commit antigo não inclui o arquivo.
+O diretório da sua máquina chamado `projeto-emprestimo-equipamentos` não é uma
+subpasta deste repositório no GitHub.
+
+Não crie uma pasta `public` vazia para contornar `STATIC_BUILD_NO_OUT_DIR`:
+o projeto precisa do processamento Next.js, inclusive para a rota `/health`.
+Para essa rota conectar ao banco na Vercel, `DATABASE_URL` deve apontar para um
+PostgreSQL acessível pelo ambiente hospedado, não para o Docker local. Configure
+o valor diretamente no painel, sem adicioná-lo ao Git. Este build não aplica
+migrations automaticamente nem provisiona um banco remoto.
+
 ## Instruções do projeto
 
 [AGENTS.md](AGENTS.md) é o ponto de entrada para as regras e define a autoridade
