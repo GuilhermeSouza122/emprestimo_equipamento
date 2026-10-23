@@ -1,5 +1,8 @@
 # Spec 001 — Homepage
 
+Visual redesenhado em 2026-10-23 conforme o layout Nocturne/EmpresTI ([ADR-002](../adr/002-desing_system.md)):
+modo escuro, marca EmpresTI e CSS Modules. Conteúdo, regras e critérios abaixo mantidos.
+
 ## Objetivo
 
 Apresentar o sistema de empréstimo de equipamentos a colaboradores e Operações

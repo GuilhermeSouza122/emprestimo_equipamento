@@ -6,10 +6,15 @@ Sistema interno descrito em [PRD](docs/PRD.md). A stack aprovada está no
 
 ## Estado implementado
 
-- Homepage informativa e responsiva conforme [Spec 001](docs/specs/001-homepage.md).
+- Homepage informativa e responsiva conforme [Spec 001](docs/specs/001-homepage.md),
+  no visual Nocturne/EmpresTI.
 - Interface de login em `/login`, acessível pelo botão "Entrar" da homepage,
   conforme [Spec 002](docs/specs/002-tela-login.md). Tem validação local e controle
   de visibilidade da senha, mas não envia credenciais nem autentica usuários.
+- Telas do layout Nocturne/EmpresTI conforme [Spec 003](docs/specs/003-layout-nocturne.md):
+  catálogo, detalhe do item, meus empréstimos, empréstimos em aberto e cadastro de
+  equipamento, em modo escuro. São estáticas, com dados de exemplo: não leem nem
+  gravam no banco e não têm autenticação. O login (`/login`) usa o mesmo visual.
 - Endpoint operacional `GET /health`, consultado pela homepage, e integração
   com PostgreSQL via Prisma.
 - Migration inicial e teste de integração do endpoint de saúde com Vitest.

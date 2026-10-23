@@ -1,84 +1,54 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { Brand } from "../_components/brand";
+import { Icon } from "../_components/nocturne/icons";
+import { NocturneRoot } from "../_components/nocturne/root";
 import { LoginForm } from "./login-form";
 import styles from "./login.module.css";
 
 export const metadata: Metadata = {
-  title: "Entrar | Equipar",
-  description: "Acesse a interface de entrada do Equipar, seu espaço para empréstimos de equipamentos internos.",
+  title: "Entrar | EmpresTI",
+  description: "Acesse o EmpresTI, sistema interno de empréstimo de equipamentos.",
 };
 
 export default function LoginPage() {
   return (
-    <div className={styles.page}>
-      <header className={styles.header}>
-        <Brand />
-        <Link className={styles.backLink} href="/">
-          <span aria-hidden="true">←</span> Voltar ao início
-        </Link>
-      </header>
+    <NocturneRoot>
+      <div className={styles.page}>
+        <aside className={styles.hero} aria-labelledby="login-intro-title">
+          <Link className={styles.brand} href="/" aria-label="EmpresTI, voltar ao início">
+            <span className={styles.brandMark}><Icon name="package" size={18} /></span>
+            EmpresTI
+          </Link>
 
-      <main className={styles.layout}>
-        <aside className={styles.aside} aria-labelledby="login-intro-title">
-          <div className={styles.asideCopy}>
-            <p className={styles.eyebrow}><span className={styles.dot} /> MAIS SIMPLES. MAIS EQUIPAR.</p>
-            <h2 id="login-intro-title">Boas ideias<br />merecem os<br /><em>recursos certos.</em></h2>
-            <p>Um lugar para encontrar equipamentos, organizar empréstimos e seguir com o que importa.</p>
-          </div>
-
-          <div className={styles.illustration} aria-hidden="true">
-            <div className={styles.illustrationOrbit} />
-            <div className={styles.deviceCard}>
-              <div className={styles.deviceScreen}>
-                <span className={styles.deviceSpark}>✳</span>
-                <span className={styles.deviceLine} />
-                <span className={styles.deviceLineShort} />
-              </div>
-              <div className={styles.deviceBase} />
+          <div className={styles.heroBody}>
+            <h2 className={styles.heroTitle} id="login-intro-title">Equipamentos certos, na hora certa.</h2>
+            <p className={styles.heroText}>Consulte o catálogo, solicite empréstimos e registre devoluções em um só lugar.</p>
+            <div className={styles.brandRule} />
+            <div className={styles.numbers}>
+              <div><p className={styles.number}>3</p><p className={styles.numberLabel}>itens por pessoa</p></div>
+              <div><p className={styles.number}>14</p><p className={styles.numberLabel}>dias de prazo</p></div>
             </div>
-            <div className={styles.noteCard}>
-              <span className={styles.noteIcon}>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M7 4 3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7" />
-                </svg>
-              </span>
-              <span className={styles.noteText}>
-                <span>Compartilhar</span>
-                <strong>faz mais sentido.</strong>
-              </span>
-            </div>
-            <span className={styles.artSpark}>✳</span>
           </div>
 
-          <div className={styles.asideFoot}>
-            <span className={styles.miniMark} aria-hidden="true">◎</span>
-            <p>Menos planilhas.<br /><strong>Mais possibilidades.</strong></p>
-          </div>
+          <p className={styles.heroFoot}>Operações · v1</p>
         </aside>
 
-        <section className={styles.formSection} aria-labelledby="login-title">
-          <div className={styles.formContent}>
-            <p className={styles.eyebrow}>BEM-VINDO AO EQUIPAR</p>
-            <h1 className={styles.title} id="login-title">Bom ter você<br /><em>por aqui.</em></h1>
-            <p className={styles.description}>Seu espaço para acompanhar empréstimos e encontrar o que precisa.</p>
+        <main className={styles.formSide}>
+          <div className={styles.formBox}>
+            <div>
+              <h1 className={styles.formTitle} id="login-title">Entrar</h1>
+              <p className={styles.formSub}>Use seu e-mail corporativo.</p>
+            </div>
             <LoginForm />
-            <p className={styles.audience}>
-              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7">
-                <rect x="5" y="10" width="14" height="11" rx="3" />
-                <path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3" />
-              </svg>
-              Um espaço interno para colaboradores e Operações.
+            <hr className={styles.rule} />
+            <p className={styles.support}>
+              Acesso interno para colaboradores e Operações.{" "}
+              <Link className={styles.back} href="/">Voltar ao início</Link>
             </p>
           </div>
-        </section>
-      </main>
-
-      <footer className={styles.footer}>
-        <span>Equipar · Empréstimo de equipamentos internos.</span>
-        <span>Feito para compartilhar.</span>
-      </footer>
-    </div>
+        </main>
+      </div>
+    </NocturneRoot>
   );
 }

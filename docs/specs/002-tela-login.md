@@ -1,22 +1,24 @@
 # Spec 002 — Tela de login
 
 **Status:** interface solicitada em 2026-10-19; autenticação real fora desta etapa.
+Visual redesenhado conforme o layout Nocturne/EmpresTI (ver [Spec 003](003-layout-nocturne.md)
+e [ADR-002](../adr/002-desing_system.md)); comportamento e critérios abaixo mantidos.
 
 ## Objetivo e vínculo
 
 Criar a interface de entrada do Equipar em `/login`, como primeira etapa visual
 do login previsto no [PRD](../PRD.md). Preservar a stack do
-[ADR-001](../adr/001-stack.md) e a identidade visual da homepage descrita no
-[ADR-002](../adr/002-desing_system.md), sem transformar esse ADR em uma definição
-de todas as telas futuras.
+[ADR-001](../adr/001-stack.md) e seguir a linguagem visual do
+[ADR-002](../adr/002-desing_system.md).
 
 Hoje não há modelos de usuário/sessão nem autenticação implementada. Esta spec
 cobre somente a tela e suas interações locais; não simula acesso autenticado.
 
 ## Escopo
 
-- Página responsiva com marca Equipar, painel ilustrativo em lavanda e formulário
-  em superfície clara, usando os roxos, fonte de sistema e cantos do projeto.
+- Página responsiva em modo escuro com marca EmpresTI, painel de apresentação
+  (3 itens por pessoa, 14 dias de prazo) e formulário, conforme a tela 01 do
+  layout Nocturne.
 - Campos de e-mail e senha com rótulos visíveis, preenchimento automático
   adequado e controle de mostrar/ocultar senha.
 - Validação de campos obrigatórios e formato do e-mail, sem inventar restrições
@@ -26,7 +28,7 @@ cobre somente a tela e suas interações locais; não simula acesso autenticado.
   de sucesso, token, sessão ou redirecionamento autenticado.
 - Link de retorno à homepage e acesso "Entrar" no cabeçalho da homepage,
   preservando o acesso ao estado do sistema.
-- CSS próprio, sem dependências novas, sem alteração no schema do banco.
+- CSS Modules, sem dependências novas, sem alteração no schema do banco.
 
 ## Critérios de aceitação
 
@@ -41,9 +43,8 @@ cobre somente a tela e suas interações locais; não simula acesso autenticado.
   atuais da homepage e seu acesso ao estado do sistema são preservados.
 - **LOGIN-05:** em computador e celular, o formulário não apresenta rolagem
   horizontal, tem foco visível, rótulos associados e feedback acessível.
-  O painel de apresentação também deve manter o texto legível, sem palavras
-  coladas nem sobreposição com a ilustração. Até 800px, ocultar a ilustração
-  decorativa e preservar as quebras de linha do título.
+  O painel de apresentação também deve manter o texto legível, sem sobreposição.
+  Até 960px, o painel passa para cima do formulário em uma coluna.
 
 ## Casos de erro e limites
 
