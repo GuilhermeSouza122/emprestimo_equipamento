@@ -30,9 +30,17 @@ Sistema interno descrito em [PRD](docs/PRD.md). A stack aprovada está no
   `data/imagens/`; o catálogo ainda não as exibe e o envio ao Supabase é manual.
 - Aplicação e banco configurados para Docker Compose.
 
-O catálogo real, os fluxos de empréstimo e devolução e as telas de Operações com dados
-do banco ainda não estão implementados. Aprovação da stack não significa que esses
-fluxos já funcionam.
+- Catálogo real e solicitação de empréstimo ([Spec 006](docs/specs/006-solicitar-emprestimo.md)):
+  `/catalogo` e `/catalogo/[patrimonio]` leem os equipamentos do banco, com a foto
+  (`EQUIPAMENTOS_IMAGENS_BASE_URL`, no Supabase Storage) e a situação de cada um;
+  solicitar cria o empréstimo na hora, só para item disponível, com devolução em 14 dias
+  úteis (calendário de São Paulo), limite de 3 itens, bloqueio por atraso e proteção
+  contra pedidos simultâneos. `/meus-emprestimos` lista os empréstimos em aberto do
+  usuário. Não há como devolver ainda: um item emprestado continua assim.
+
+A devolução e as telas de Operações com dados do banco ainda não estão implementadas
+(as telas de Operações mostram dados de exemplo). Aprovação da stack não significa que
+esses fluxos já funcionam.
 
 ## Preparar o ambiente
 

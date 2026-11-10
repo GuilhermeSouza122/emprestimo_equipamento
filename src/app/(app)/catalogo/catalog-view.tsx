@@ -2,17 +2,18 @@
 
 import { useState } from "react";
 
+import type { CategoriaRotulo, EquipamentoCatalogo } from "../../../server/equipamentos/catalogo";
 import { AppHeader, HeaderSearch, ItemCounter } from "../../_components/nocturne/app-header";
 import { Icon } from "../../_components/nocturne/icons";
-import { categorias, equipamentos } from "../../_components/nocturne/sample-data";
-import type { Categoria } from "../../_components/nocturne/sample-data";
 import shell from "../../_components/nocturne/shell.module.css";
 import { EquipmentCard } from "../../_components/nocturne/ui";
 import ui from "../../_components/nocturne/ui.module.css";
 import styles from "../screens.module.css";
 
-export function CatalogView() {
-  const [categoria, setCategoria] = useState<Categoria | null>(null);
+const categorias: CategoriaRotulo[] = ["Notebooks", "Monitores", "Cabos", "Câmeras"];
+
+export function CatalogView({ equipamentos, emUso }: { equipamentos: EquipamentoCatalogo[]; emUso: number }) {
+  const [categoria, setCategoria] = useState<CategoriaRotulo | null>(null);
   const [onlyAvailable, setOnlyAvailable] = useState(false);
   const [query, setQuery] = useState("");
 
@@ -23,17 +24,18 @@ export function CatalogView() {
       (!onlyAvailable || item.estado === "disponivel") &&
       (!text || `${item.nome} ${item.patrimonio} ${item.categoria}`.toLowerCase().includes(text)),
   );
+  const disponiveis = equipamentos.filter((item) => item.estado === "disponivel").length;
 
   return (
     <>
       <AppHeader
         left={<HeaderSearch label="Buscar equipamento" placeholder="Buscar por nome ou patrimônio" value={query} onChange={setQuery} />}
-        right={<ItemCounter />}
+        right={<ItemCounter used={emUso} />}
       />
       <div className={shell.content}>
         <div className={shell.pageTitle}>
           <h1>Catálogo</h1>
-          <p className={shell.pageSub}>32 equipamentos · 11 disponíveis agora</p>
+          <p className={shell.pageSub}>{equipamentos.length} equipamentos · {disponiveis} disponíveis agora</p>
         </div>
 
         <div className={ui.notice}>
@@ -42,7 +44,7 @@ export function CatalogView() {
             <p className={ui.noticeTitle}>Regras de empréstimo</p>
             <p className={ui.noticeBody}>
               Até 3 itens por pessoa, prazo de 14 dias úteis. Quem tem item em atraso não solicita outro.
-              Itens em manutenção ficam fora do catálogo.
+              Itens em manutenção não podem ser solicitados.
             </p>
           </div>
         </div>
@@ -67,7 +69,6 @@ export function CatalogView() {
             {visible.map((item) => <EquipmentCard key={item.patrimonio} item={item} />)}
           </div>
         )}
-        <p className={shell.preview}>Dados de exemplo. O catálogo real ainda não está conectado ao banco.</p>
       </div>
     </>
   );

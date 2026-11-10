@@ -50,8 +50,12 @@ e header de 64 px.
   verificados no servidor. A barra lateral esconde o grupo "Operações" para
   colaboradores (conveniência; a proteção real é a do servidor). Os dados continuam
   fictícios.
-- Regras de negócio (3 itens, 14 dias úteis, bloqueio por atraso) aparecem na interface
-  como informação; não são impostas por back-end.
+- ~~Regras de negócio (3 itens, 14 dias úteis, bloqueio por atraso) aparecem como
+  informação, sem back-end.~~ **Substituído pela Spec 006 para `/catalogo`,
+  `/catalogo/[patrimonio]` e `/meus-emprestimos`:** essas telas leem o banco e o servidor
+  impõe as regras. Os critérios NOC-03, NOC-04 e NOC-05 passam a valer como EMP-03, EMP-05 e
+  EMP-06 (o diálogo agora registra a solicitação de verdade). As telas de Operações
+  continuam estáticas, com dados de exemplo.
 - Patrimônio inexistente em `/catalogo/[patrimonio]` retorna 404.
 - Reserva futura, e-mail e importação de planilha seguem fora de escopo (v1).
 

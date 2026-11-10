@@ -80,3 +80,6 @@
 /* Links */
 .link { color: var(--accent-400); text-decoration: none; }
 .link:hover { color: var(--accent-300); }
+
+.photo { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 8px; background: var(--surface-sunken); }
+.photoFallback { display: grid; place-items: center; width: 100%; aspect-ratio: 4 / 3; border-radius: 8px; background: var(--surface-sunken); color: var(--text-faint); }

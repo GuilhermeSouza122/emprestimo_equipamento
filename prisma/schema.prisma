@@ -32,13 +32,14 @@ enum SituacaoEquipamento {
 }
 
 model Usuario {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  nome      String
-  papel     Papel
-  senhaHash String   @map("senha_hash")
-  createdAt DateTime @default(now()) @map("created_at")
-  sessoes   Sessao[]
+  id          Int          @id @default(autoincrement())
+  email       String       @unique
+  nome        String
+  papel       Papel
+  senhaHash   String       @map("senha_hash")
+  createdAt   DateTime     @default(now()) @map("created_at")
+  sessoes     Sessao[]
+  emprestimos Emprestimo[]
 
   @@map("usuarios")
 }
@@ -65,8 +66,25 @@ model Equipamento {
   imagemArquivo String               @map("imagem_arquivo")
   createdAt     DateTime             @default(now()) @map("created_at")
   updatedAt     DateTime             @updatedAt @map("updated_at")
+  emprestimos   Emprestimo[]
 
   @@map("equipamentos")
+}
+
+// Empréstimo em aberto = devolvidoEm nulo. A devolução ainda não existe (fora da Spec 006).
+model Emprestimo {
+  id                  Int         @id @default(autoincrement())
+  usuarioId           Int         @map("usuario_id")
+  usuario             Usuario     @relation(fields: [usuarioId], references: [id])
+  equipamentoId       Int         @map("equipamento_id")
+  equipamento         Equipamento @relation(fields: [equipamentoId], references: [id])
+  solicitadoEm        DateTime    @map("solicitado_em")
+  devolucaoPrevistaEm DateTime    @map("devolucao_prevista_em") @db.Date
+  devolvidoEm         DateTime?   @map("devolvido_em")
+
+  @@index([usuarioId, devolvidoEm])
+  @@index([equipamentoId, devolvidoEm])
+  @@map("emprestimos")
 }
 
 model SystemStatus {

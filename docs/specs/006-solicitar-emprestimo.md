@@ -1,7 +1,15 @@
 # Spec 006 — Catálogo real e solicitar empréstimo
 
-**Status:** proposta de 2026-11-10, aguardando aprovação. Nenhum código de
-funcionalidade deve ser escrito antes dela.
+**Status:** aprovada pelo usuário em 2026-11-10, com as decisões da tabela abaixo,
+a conta de teste no seed e os feriados confirmados.
+
+**Implementação (2026-11-10):** feita e verificada por `lint`, `tsc`, `npm test` (68 testes,
+repetido 3 vezes para estabilidade das provas de concorrência), `npm run build`, as 4
+migrations em banco vazio e um teste no navegador com a conta de teste (login, catálogo com
+as 12 fotos do Supabase, solicitar 3 itens, recusa por limite, manutenção, "Meus
+empréstimos" e Sair), com o banco local restaurado depois. **Verificação independente
+pendente:** o `verificador-specs` ainda não rodou sobre esta spec; ela consta como
+"implementada, verificação pendente" (`rules/spec-flow.md`).
 
 ## Objetivo e vínculo
 

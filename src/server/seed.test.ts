@@ -129,10 +129,11 @@ describe("seed: gravacao no banco (PostgreSQL local)", () => {
     expect(usuario.senhaHash).not.toContain("senha-de-teste-123");
   });
 
-  it("DADOS-03: o seed nao cria nenhum emprestimo (nao existe tabela de emprestimos)", async () => {
-    await executarSeed(db, opcoes());
-    const tabelas = await db.$queryRaw<{ tablename: string }[]>`select tablename from pg_tables where schemaname = 'public'`;
-    expect(tabelas.map((t) => t.tablename)).not.toContain("emprestimos");
+  it("DADOS-03: o seed nao cria nenhum emprestimo (a tabela existe desde a Spec 006)", async () => {
+    await executarSeed(db, opcoes({ contaTeste: contaExtra }));
+
+    expect(await db.emprestimo.count({ where: { usuario: { email: { in: [usuarioTeste.email, contaExtra.email] } } } })).toBe(0);
+    expect(await db.emprestimo.count({ where: { equipamento: { patrimonio: { startsWith: "TST-" } } } })).toBe(0);
   });
 
   it("DADOS-04: repetir o seed nao duplica nada nem troca o hash do usuario", async () => {

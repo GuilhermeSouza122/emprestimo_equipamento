@@ -8,7 +8,8 @@
 /* Detalhe */
 .detail { display: grid; grid-template-columns: minmax(0, 1fr) 356px; gap: 32px; align-items: start; }
 .stack { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
-.hero { display: grid; place-items: center; height: 260px; border-radius: 12px; border: 1px solid var(--border-card); background: radial-gradient(120% 120% at 20% 0%, #132663 0%, #0b1128 60%); color: var(--accent-600); }
+.hero { display: grid; place-items: center; min-height: 260px; overflow: hidden; border-radius: 12px; border: 1px solid var(--border-card); background: radial-gradient(120% 120% at 20% 0%, #132663 0%, #0b1128 60%); color: var(--accent-600); }
+.hero img { max-height: 380px; }
 .itemTitle { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
 .itemTitle h1 { font-size: 28px; }
 .desc { max-width: 60ch; color: var(--text-muted); font-size: 13.5px; text-wrap: pretty; }

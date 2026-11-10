@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { EquipmentImage } from "./equipment-image";
 import { Icon } from "./icons";
 import type { IconName } from "./icons";
 import { estadoRotulo } from "./sample-data";
@@ -10,6 +11,7 @@ const categoriaIcone: Record<Categoria, IconName> = {
   Notebooks: "laptop",
   Monitores: "monitor",
   Câmeras: "video-camera",
+  Cabos: "usb",
   "Cabos e docks": "usb",
   Projetores: "projector-screen",
 };
@@ -26,15 +28,22 @@ export function StatusPill({ estado }: { estado: Estado }) {
   return <span className={`${styles.pill} ${styles[estado]}`}>{estadoRotulo[estado]}</span>;
 }
 
-type CardItem = Pick<Equipamento, "patrimonio" | "nome" | "categoria" | "estado" | "com" | "devolucao" | "assistencia">;
+// `imagemUrl` só existe nos dados reais do catálogo (Spec 006); os dados de exemplo não a têm.
+type CardItem = Pick<Equipamento, "patrimonio" | "nome" | "categoria" | "estado" | "com" | "devolucao" | "assistencia"> & {
+  imagemUrl?: string | null;
+};
 
 export function EquipmentCard({ item, linked = true }: { item: CardItem; linked?: boolean }) {
+  const comFoto = item.imagemUrl !== undefined;
   const body = (
     <>
       <div className={styles.cardTop}>
-        <EquipmentIcon categoria={item.categoria} />
+        {comFoto ? <span /> : <EquipmentIcon categoria={item.categoria} />}
         <StatusPill estado={item.estado} />
       </div>
+      {comFoto ? (
+        <EquipmentImage src={item.imagemUrl ?? null} alt={`Foto de ${item.nome}`} fallback={<EquipmentIcon categoria={item.categoria} large />} />
+      ) : null}
       <div>
         <h3 className={styles.cardName}>{item.nome}</h3>
         <p className={styles.cardMeta}>{item.categoria} · {item.patrimonio}</p>
@@ -42,9 +51,9 @@ export function EquipmentCard({ item, linked = true }: { item: CardItem; linked?
       {item.estado === "disponivel" ? (
         <p className={`${styles.cardFoot} ${styles.cardAction}`}>Solicitar <Icon name="arrow-right" size={13} /></p>
       ) : item.estado === "emprestado" ? (
-        <p className={styles.cardFoot}>Com {item.com} · devolve {item.devolucao}</p>
+        <p className={styles.cardFoot}>{item.com ? `Com ${item.com} · devolve ${item.devolucao}` : "Emprestado"}</p>
       ) : (
-        <p className={styles.cardFoot}>Em assistência{item.assistencia ? ` · ${item.assistencia}` : ""}</p>
+        <p className={styles.cardFoot}>{item.assistencia ? `Em assistência · ${item.assistencia}` : "Em manutenção"}</p>
       )}
     </>
   );

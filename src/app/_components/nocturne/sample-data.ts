@@ -1,7 +1,7 @@
 // Dados de exemplo do layout.md. Não vêm do banco: ainda não há modelos de domínio.
 
 export type Estado = "disponivel" | "emprestado" | "manutencao";
-export type Categoria = "Notebooks" | "Monitores" | "Câmeras" | "Cabos e docks" | "Projetores";
+export type Categoria = "Notebooks" | "Monitores" | "Câmeras" | "Cabos" | "Cabos e docks" | "Projetores";
 
 export type Equipamento = {
   patrimonio: string;

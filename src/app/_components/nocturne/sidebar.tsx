@@ -10,14 +10,14 @@ import { Icon } from "./icons";
 import type { IconName } from "./icons";
 import styles from "./shell.module.css";
 
-type NavItem = { href: string; label: string; icon: IconName; badge?: string };
+type NavItem = { href: string; label: string; icon: IconName };
 
 const groups: { label: string; items: NavItem[] }[] = [
   {
     label: "Colaborador",
     items: [
       { href: "/catalogo", label: "Catálogo", icon: "squares-four" },
-      { href: "/meus-emprestimos", label: "Meus empréstimos", icon: "hand-arrow-down", badge: "2" },
+      { href: "/meus-emprestimos", label: "Meus empréstimos", icon: "hand-arrow-down" },
     ],
   },
   {
@@ -37,7 +37,7 @@ function iniciais(nome: string) {
   return `${primeira}${ultima}`.toUpperCase();
 }
 
-export function Sidebar({ usuario }: { usuario: UsuarioPublico | null }) {
+export function Sidebar({ usuario, emprestimosAbertos }: { usuario: UsuarioPublico | null; emprestimosAbertos: number }) {
   const pathname = usePathname();
   const router = useRouter();
   const [saindo, setSaindo] = useState(false);
@@ -76,7 +76,9 @@ export function Sidebar({ usuario }: { usuario: UsuarioPublico | null }) {
                 >
                   <Icon name={item.icon} filled={active} />
                   {item.label}
-                  {item.badge ? <span className={styles.badge}>{item.badge}</span> : null}
+                  {item.href === "/meus-emprestimos" && emprestimosAbertos > 0 ? (
+                    <span className={styles.badge}>{emprestimosAbertos}</span>
+                  ) : null}
                 </Link>
               );
             })}

@@ -68,7 +68,8 @@ usuário de Operações, envio de imagens ao Supabase (feito pelo usuário).
 - **DADOS-02:** o seed cria exatamente os 12 equipamentos de `data/equipamentos.json`,
   com patrimônio, nome, categoria, situação e arquivo de imagem iguais aos da lista.
 - **DADOS-03:** existe um usuário `marcelo.grilo@institutojef.org.br`, papel
-  `colaborador`, com hash `scrypt` (nunca a senha em texto), e nenhum empréstimo.
+  `colaborador`, com hash `scrypt` (nunca a senha em texto), e nenhum empréstimo (a
+  tabela de empréstimos passou a existir na Spec 006; o seed nunca cria linhas nela).
 - **DADOS-04:** rodar o seed duas ou mais vezes mantém 12 equipamentos e 1 usuário,
   sem duplicar, sem trocar o hash do usuário existente e sem alterar a situação de um
   equipamento já cadastrado.

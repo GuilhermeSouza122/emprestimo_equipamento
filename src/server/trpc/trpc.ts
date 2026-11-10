@@ -3,6 +3,7 @@ import type { PrismaClient } from "@prisma/client";
 
 import { usuarioDaSessao } from "../auth/sessao";
 import type { Relogio } from "../auth/sessao";
+import { RecusaEmprestimo } from "../emprestimos/servico";
 
 export type Contexto = {
   prisma: PrismaClient;
@@ -15,8 +16,16 @@ export type Contexto = {
 };
 
 const t = initTRPC.context<Contexto>().create({
-  // Nunca devolver o stack ao cliente, nem em desenvolvimento.
-  errorFormatter: ({ shape }) => ({ ...shape, data: { ...shape.data, stack: undefined } }),
+  // Nunca devolver o stack ao cliente, nem em desenvolvimento. `motivo` identifica a recusa de
+  // um empréstimo (LIMITE, ATRASO, ...) para a tela, sem expor mais nada do erro original.
+  errorFormatter: ({ shape, error }) => ({
+    ...shape,
+    data: {
+      ...shape.data,
+      stack: undefined,
+      motivo: error.cause instanceof RecusaEmprestimo ? error.cause.codigo : undefined,
+    },
+  }),
 });
 
 export const router = t.router;
