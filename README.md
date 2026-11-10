@@ -18,6 +18,10 @@ Sistema interno descrito em [PRD](docs/PRD.md). A stack aprovada está no
 - Endpoint operacional `GET /health`, consultado pela homepage, e integração
   com PostgreSQL via Prisma.
 - Migration inicial e teste de integração do endpoint de saúde com Vitest.
+- Modelos `Usuario` e `Equipamento` com migration e seed idempotente
+  ([Spec 004](docs/specs/004-dados-iniciais.md), [ADR-003](docs/adr/003-imagens-equipamentos.md)).
+  As 12 imagens (800×600) preparadas pela skill `imagens-equipamentos` estão em
+  `data/imagens/`; o catálogo ainda não as exibe e o envio ao Supabase é manual.
 - Aplicação e banco configurados para Docker Compose.
 
 Autenticação real, sessões, procedimentos tRPC, catálogo e fluxos reais de empréstimo,
@@ -73,6 +77,14 @@ subir o serviço `db`. `npm install` gera o Prisma Client automaticamente.
 | `npm run db:generate` | Gera Prisma Client a partir do schema |
 | `npm run db:migrate` | Cria/aplica migrations de desenvolvimento; pode solicitar reset em caso de divergência |
 | `npm run db:deploy` | Aplica migrations existentes, sem gerar novas |
+| `npm run db:seed` | Grava os 12 equipamentos e a conta do professor ([Spec 004](docs/specs/004-dados-iniciais.md)); só aceita banco local, salvo `--producao` |
+
+O seed lê a senha da conta do professor de `SEED_PROFESSOR_PASSWORD`, definida no
+ambiente ao rodar o comando (nunca no código nem no git). É idempotente: repetir
+não duplica nada, não troca a senha de quem já existe e não altera a situação de
+equipamentos já cadastrados. Gravar no banco do deploy (`--producao`) e enviar as
+imagens ao Supabase é ação do usuário; os passos das imagens estão em
+`.claude/skills/imagens-equipamentos/references/envio-producao.md`.
 
 Não confirme um reset solicitado pelo Prisma sem autorização sobre o banco alvo.
 

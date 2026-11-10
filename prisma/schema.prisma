@@ -7,6 +7,54 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Papel {
+  colaborador
+  operacoes
+
+  @@map("papel")
+}
+
+enum CategoriaEquipamento {
+  notebook
+  monitor
+  cabo
+  camera
+
+  @@map("categoria_equipamento")
+}
+
+enum SituacaoEquipamento {
+  disponivel
+  manutencao
+  emprestado
+
+  @@map("situacao_equipamento")
+}
+
+model Usuario {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  nome      String
+  papel     Papel
+  senhaHash String   @map("senha_hash")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("usuarios")
+}
+
+model Equipamento {
+  id            Int                  @id @default(autoincrement())
+  patrimonio    String               @unique
+  nome          String
+  categoria     CategoriaEquipamento
+  situacao      SituacaoEquipamento
+  imagemArquivo String               @map("imagem_arquivo")
+  createdAt     DateTime             @default(now()) @map("created_at")
+  updatedAt     DateTime             @updatedAt @map("updated_at")
+
+  @@map("equipamentos")
+}
+
 model SystemStatus {
   id        Int      @id @default(1)
   createdAt DateTime @default(now()) @map("created_at")
