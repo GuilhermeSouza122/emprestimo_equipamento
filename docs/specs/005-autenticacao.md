@@ -84,8 +84,10 @@ esta spec não os resolve e exige decisão explícita sobre eles (`rules/checks.
 - **AUTH-04:** sessão expirada ou revogada é recusada no servidor; `auth.sair`
   revoga a sessão no banco e limpa o cookie.
 - **AUTH-05:** sem sessão, `/catalogo`, `/meus-emprestimos` e `/operacoes/*`
-  redirecionam para `/login`. Colaborador em `/operacoes/*` é recusado no servidor,
-  inclusive por chamada direta ao procedimento.
+  redirecionam para `/login`. Colaborador em `/operacoes/*` é **recusado no servidor** de duas
+  formas: a página o redireciona para `/catalogo` (`exigirOperacoes`) e o procedimento tRPC de
+  Operações devolve `FORBIDDEN`, inclusive em chamada direta. As duas têm teste automático
+  (`dal.test.ts` e `autenticacao.test.ts`).
 - **AUTH-06:** `auth.eu` devolve só id, nome, e-mail e papel, nunca o hash.
 - **AUTH-07:** o servidor valida e-mail (formato e tamanho máximo), senha obrigatória
   e tamanho máximo antes de tocar no banco; entrada inválida não cria sessão.
@@ -99,8 +101,8 @@ esta spec não os resolve e exige decisão explícita sobre eles (`rules/checks.
 - Cookie ausente, malformado ou de sessão inexistente: tratado como anônimo.
 - Banco indisponível: o login falha com mensagem genérica de erro temporário, sem
   detalhes internos, e não concede acesso.
-- `SESSION_SECRET` ausente ou fraca em produção: a aplicação recusa criar sessões e
-  registra o motivo sem expor o valor.
+- `SESSION_SECRET` ausente ou fraca em produção: `criarContexto` registra o motivo no log (nunca o
+  valor) e a requisição falha com 500, sem criar nem validar sessão (`contexto.test.ts`).
 - Risco aceito e registrado: sem limite de tentativas, um atacante pode tentar
   senhas em sequência. Mitigação futura: bloqueio temporário por e-mail e por origem.
 - Ocultar controles na interface não conta como proteção: toda verificação é feita

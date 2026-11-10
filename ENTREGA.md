@@ -199,8 +199,18 @@ comportamento foi reprovado. Resumo das tabelas devolvidas:
   o proxy só confere a presença do cookie, e a validação real fica nas páginas e nos procedimentos (como a spec descreve).
 - **Spec 006: APROVADA** pelo verificador (14 de 14, `npm run build` OK, 69 testes). Ressalvas dele: interface
   conferida só por leitura de código e `npm audit` decidido como risco aceito (seção 8).
-- **Aberto:** os relatórios das Specs 004 e 005 são da rodada anterior (build com EPERM, antes do teste de
-  migrations do zero). Falta uma nova rodada do verificador sobre as duas, sem `next dev` aberto, para os
+- **Terceira rodada (Specs 004 e 005):** todos os critérios de comportamento aprovados, incluindo DADOS-01
+  (agora coberto por `migracoes.test.ts`). O parecer continuou PENDENTE só por `npm run build`: `EPERM`
+  em `.next/static`. Como o projeto está dentro do OneDrive, que segura arquivos, não dá para separar
+  bloqueio do OneDrive de um `next dev` aberto. Mitigação: script `prebuild` (`scripts/limpar-next.mjs`)
+  que remove `.next` com repetição; dois builds seguidos passaram. Se voltar, pausar a sincronização do
+  OneDrive nesta pasta ou mover o projeto para fora dele.
+- **Lacunas leves apontadas na Spec 005 e corrigidas:** (1) `criarContexto` só lançava o erro de
+  `SESSION_SECRET`; agora registra o motivo no log, sem o valor, com teste; (2) a proteção das páginas
+  (`dal.ts`) só tinha leitura de código; agora tem `dal.test.ts` (sem cookie, cookie inválido, sessão
+  revogada, colaborador e Operações); (3) o texto "recusado no servidor" foi esclarecido (redireciona na
+  página e devolve `FORBIDDEN` na API).
+- **Aberto:** como o código mudou, falta uma nova rodada do verificador sobre as Specs 004 e 005 para os
   pareceres virarem APROVADA. DADOS-07 (URL pública em produção) e o seed no deploy dependem do usuário.
 
 ## 7. Uma regra sua que esta prática pôs à prova

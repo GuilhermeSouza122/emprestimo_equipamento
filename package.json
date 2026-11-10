@@ -6,6 +6,7 @@
   "scripts": {
     "postinstall": "node node_modules/prisma/build/index.js generate",
     "dev": "node node_modules/next/dist/bin/next dev",
+    "prebuild": "node scripts/limpar-next.mjs",
     "build": "node node_modules/next/dist/bin/next build",
     "start": "node node_modules/next/dist/bin/next start",
     "lint": "node node_modules/eslint/bin/eslint.js .",
