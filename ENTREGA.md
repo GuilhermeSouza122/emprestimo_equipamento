@@ -26,6 +26,11 @@ Cada decisão também está registrada na spec correspondente.
 | spec | o que faltava | alternativas | o que decidiu | por quê | commit |
 |------|---------------|--------------|---------------|---------|--------|
 | solicitar empréstimo | Como contar os 14 dias úteis: quais dias pulam, quais feriados, qual fuso | (a) só pular sábado e domingo; (b) pular também feriados nacionais; (c) pular feriados nacionais, estaduais e municipais de SP | (c): pula sábado, domingo e feriados nacionais, do estado e do município de São Paulo; fuso America/Sao_Paulo | O sistema é usado em SP, e a lista de feriados reflete os dias em que Operações não atende. | ff1315b |
+| solicitar empréstimo | O dia do empréstimo conta como dia 1 dos 14 dias úteis? | (a) conta; (b) não conta, o 1º dia útil é o seguinte | (b): o dia do empréstimo não conta, mesmo que seja fim de semana ou feriado | O PRD diz "a partir do dia do empréstimo" sem dizer se ele entra; assim um pedido no sábado ou em feriado funciona sem regra extra. Exemplo conferido em teste: 10/11/2026 vence em 01/12/2026 | 73f58c1 |
+| solicitar empréstimo | O que é "empréstimo em atraso" | (a) vence hoje já é atraso; (b) só depois do dia da devolução prevista | (b): devolução prevista anterior a hoje (dia civil de São Paulo) | O PRD diz só "em atraso"; prazo até o fim do dia é o uso comum | 73f58c1 |
+| solicitar empréstimo | Quem pode solicitar | (a) só colaborador; (b) qualquer usuário autenticado | (b): colaborador e Operações | O PRD só diz que o colaborador pede; quem é de Operações também é funcionário | 73f58c1 |
+| solicitar empréstimo | Como garantir "dois pedidos ao mesmo tempo, só um é criado" e o limite com pedidos simultâneos | (a) índice único parcial no banco (o Prisma não o representa); (b) isolamento serializável com repetição; (c) trava da linha do usuário + atualização condicional do equipamento, numa transação | (c) | Não exige biblioteca nem recurso fora do Prisma e foi provado com testes de concorrência (Promise.all) repetidos | 73f58c1 |
+| solicitar empréstimo | O que mostrar nas telas quando o dado não existe no banco (local, última devolução, histórico, botão Devolver) | (a) manter os campos de exemplo; (b) remover o que o banco não tem | (b): removidos; Operações continua com dados de exemplo e aviso | Dado fictício na tela do professor contradiria "zero empréstimos" | 73f58c1 |
 
 ## 2. Onde o agente tentou decidir por você
 _(Rascunho escrito a partir do histórico da sessão; conferir antes de entregar.)_
@@ -192,9 +197,10 @@ Outros pontos que a prática expôs, sem mudar a rule ainda:
 
 ## 8. O que ficou de fora e o que faria diferente
 **Ficou de fora:**
-- **Spec 005 (autenticação) não implementada** e **Spec 006 (solicitar empréstimo) nem escrita.**
-  Sem isso, o professor não consegue entrar em produção nem solicitar um empréstimo. É o maior
-  item pendente.
+- **Specs 005 e 006 implementadas, mas sem verificação independente.** Falta rodar o 
+  (só carrega em sessão nova) sobre as Specs 004, 005 e 006 e anexar as tabelas finais à seção 6.
+- **Sem devolução.** Um item emprestado continua assim, então o estoque de teste é consumido (9 itens
+  disponíveis); liberar itens em produção é ação do usuário no banco. Operações segue com dados de exemplo.
 - Rodar o seed no banco do deploy e enviar as imagens ao Supabase: ações do usuário, fora do agente.
 - Rodar o `verificador-specs` de verdade (ele só carrega em sessão nova) e a prova com erro plantado.
 - Leitura da licença completa do Pixabay; o catálogo ficou sem crédito na tela por decisão do usuário.
