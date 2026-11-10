@@ -14,7 +14,7 @@ tamanho uniforme (800×600), não repetir entre equipamentos e ficar acessíveis
 por URL pública sem login.
 
 O enunciado da prática previa o Pexels como fonte. O professor indicou o Pixabay
-como alternativa (mensagem a ser anexada como evidência no `ENTREGA.md`).
+como alternativa.
 
 ## Decisão
 

@@ -13,7 +13,7 @@ outro trecho do próprio enunciado.
 |--------|-------------------|----------------|---------|-----------------------|--------|
 | Briefing "solicitar empréstimo", item 4: quem já tem **5** empréstimos em aberto não pode solicitar outro | `docs/PRD.md:28` ("Cada pessoa pode estar com no máximo **3** itens ao mesmo tempo"), repetido na homepage (Spec 001, CA-02), na tela de login (Spec 002) e na Spec 003 | Mantive o limite de **3**. O briefing não foi seguido neste ponto. | O PRD é a fonte da regra de negócio (`AGENTS.md`, seção Precedência) e já definia o limite de 3 antes desta prática. As telas e specs existentes já comunicam "3 itens por pessoa". Um briefing é um pedido e não pode alterar regra de negócio sem aprovação e atualização do PRD. Usar 5 deixaria o sistema inconsistente com o que ele próprio informa ao usuário. | Spec de solicitar empréstimo (a criar) e este arquivo | ff1315b |
 | Briefing "solicitar empréstimo", item 3: devolução prevista para **14 dias úteis** depois | `docs/PRD.md:29` dizia apenas "14 dias", sem falar em dias úteis | Segui o briefing e **alterei o PRD** para "14 dias úteis" (sem sábados, domingos e feriados de SP). | O PRD é a fonte da regra de negócio, então a mudança foi feita nele antes da spec, como exige o `AGENTS.md`. O briefing é o pedido mais recente e mais específico da regra. | `docs/PRD.md` (regras que Operações já decidiu) e spec de solicitar empréstimo (a criar) | ff1315b |
-| Enunciado, contrato da skill: fonte de imagens **só a API do Pexels** | O professor indicou o **Pixabay** como alternativa (o Pexels foi considerado pago). Evidência: _(anexar a mensagem do professor, com data)_ | Usei o Pixabay como fonte. A skill e o ADR-003 seguem essa fonte. | A alternativa foi indicada pelo professor. O Pixabay não redimensiona, então 800×600 exige `sharp`, que, junto com o Supabase Storage, não estava no ADR-001. Por isso foi redigido o ADR-003 (proposto), sem adicionar dependência antes da aceitação. | `docs/adr/003-imagens-equipamentos.md` | 979b46d |
+| Enunciado, contrato da skill: fonte de imagens **só a API do Pexels** | O professor indicou o **Pixabay** como alternativa (o Pexels foi considerado pago). | Usei o Pixabay como fonte. A skill e o ADR-003 seguem essa fonte. | A alternativa foi indicada pelo professor. O Pixabay não redimensiona, então 800×600 exige `sharp`, que, junto com o Supabase Storage, não estava no ADR-001. Por isso foi redigido o ADR-003 (proposto), sem adicionar dependência antes da aceitação. | `docs/adr/003-imagens-equipamentos.md` | 979b46d |
 | Enunciado, seção 00: o sistema "já está no ar com login"; a prática só prevê as specs de dados iniciais e de solicitar empréstimo | `README.md`, Spec 002 e `prisma/schema.prisma`: o login é só interface, sem usuário, sessão ou autenticação (ADR-001 a decide, mas não está implementada). "Entrar com a senha padrão" e "colaborador logado" exigem login real | Criei uma spec própria de autenticação, a Spec 005, entre a de dados iniciais (004) e a de solicitar empréstimo. | Sem autenticação real o professor não consegue entrar nem o empréstimo ter um dono. Incluir isso na spec de dados misturaria dois assuntos; separar mantém cada spec verificável | `docs/specs/005-autenticacao.md` e `docs/specs/004-dados-iniciais.md` (pendência 1) | 979b46d |
 | Enunciado, seção 03 (contrato da skill): a tela que exibe as fotos mostra "Fotos: Pexels" com link, "exigência das diretrizes da API" | Enunciado, seção 05 (briefing de solicitar empréstimo), item 9: "o catálogo deve ser limpo, sem rodapé nem texto de crédito" | Sem crédito na tela. Segui o item 9 do briefing e não exibi "Fotos: Pixabay" nem outro texto de crédito. | O crédito exigido era uma diretriz da API do Pexels, que deixou de ser a fonte: o professor indicou o Pixabay, cuja documentação trata a atribuição como pedido, não como exigência. O pedido do briefing é específico para o catálogo. Risco aceito: a licença completa do Pixabay não foi lida pelo agente; a conferência da licença fica pendente do usuário. | `docs/specs/006` (a criar: catálogo sem crédito); autoria registrada por imagem em `data/imagens/creditos.json` (autor, página, licença, id) | 6c20b04 |
 | Briefing "dados iniciais", item 3: "TI-0004 e TI-0007 em manutenção; os outros 10 disponíveis" | A lista de equipamentos do enunciado (seção 03, "use exatamente esta"), que marca também o **TI-0010** (cabo de rede 3 m) como `manutencao`. Os dois trechos não podem valer juntos: 2 ou 3 itens em manutenção | **TI-0010 em manutenção**: 3 em manutenção (TI-0004, TI-0007, TI-0010) e 9 disponíveis. | A lista é o dado que o enunciado manda usar sem alterações e é mais específica que o texto do item 3, que resume o dado em palavras. Itens em manutenção não podem ser solicitados (PRD e Spec 003), então o professor vê o TI-0010 bloqueado na solicitação. | `docs/specs/004-dados-iniciais.md` (tabela de decisões, DADOS-02) e `data/equipamentos.json` | 979b46d, 6d10191 |
@@ -28,12 +28,48 @@ Cada decisão também está registrada na spec correspondente.
 | solicitar empréstimo | Como contar os 14 dias úteis: quais dias pulam, quais feriados, qual fuso | (a) só pular sábado e domingo; (b) pular também feriados nacionais; (c) pular feriados nacionais, estaduais e municipais de SP | (c): pula sábado, domingo e feriados nacionais, do estado e do município de São Paulo; fuso America/Sao_Paulo | O sistema é usado em SP, e a lista de feriados reflete os dias em que Operações não atende. | ff1315b |
 
 ## 2. Onde o agente tentou decidir por você
-Pelo menos um momento em que o agente assumiu algo que não estava
-escrito. Como você percebeu e o que fez.
+_(Rascunho escrito a partir do histórico da sessão; conferir antes de entregar.)_
+
+1. **Escolha das fotos.** A primeira proposta do script escolhia o primeiro candidato
+   sem pessoa/marca nas tags e já saía como "proposta". Ao olhar as folhas de contato,
+   vi que várias eram erradas (xícara de café para o TI-0001, livro e óculos para o
+   TI-0002, câmera Olympus com marca legível para o TI-0012). O que impediu o agente de
+   seguir adiante foi o desenho da skill: toda proposta nasce `"pendente"` e só a
+   aprovação do usuário a torna `"aprovada"`. Troquei as propostas ruins, mostrei as 12
+   e o usuário aprovou. As 14 reprovadas estão em `data/imagens/reprovadas.json`.
+2. **Contornar um bloqueio.** Ao diagnosticar por que as miniaturas saíam em branco,
+   o agente tentou repetir o download com cabeçalhos de navegador (User-Agent e Referer)
+   falsos. O harness bloqueou a ação como tentativa de contornar uma verificação
+   anti-bot, e o agente não repetiu. A causa real era uma rajada de downloads sem
+   intervalo; a correção foi esperar 400 ms entre eles (`preparar.mjs`).
+3. **Valores que o agente colocou nas specs sem o enunciado dizer.** Nome de exibição
+   "Marcelo Grilo", sessão de 8 horas, nome do bucket `equipamentos`, `TI-0010` em
+   manutenção. Nenhum foi aplicado direto: entraram nas specs como "decisões a aprovar".
+   O nome foi confirmado numa pergunta; o TI-0010 recebeu "sem preferência" na pergunta e
+   só ficou fechado quando o usuário pediu "deixe o TI-0010 em manutenção".
+4. **Recomendação que mudou.** O agente recomendou manter o Pexels sem `sharp`. Ao
+   ler a documentação do Pixabay, viu que ele não recorta, e a recomendação mudou:
+   `sharp` e Storage passaram a exigir ADR (seção 3).
 
 ## 3. Uma decisão que merece (ou não) um ADR
-Escolha uma decisão desta prática com alternativa defensável.
-Ela virou ADR? Por quê — ou por que não?
+**Decisão:** fonte, processamento e armazenamento das imagens (Pixabay, `sharp`,
+Supabase Storage). **Virou ADR:** sim, o [ADR-003](docs/adr/003-imagens-equipamentos.md),
+aceito em 2026-11-10 (commit `979b46d`).
+
+- **Por que merece ADR:** o ADR-001 não decide fonte de imagens, biblioteca de imagem nem
+  armazenamento de arquivos, e deixa a hospedagem como decisão futura. As três escolhas
+  trazem dependência nova (`sharp`) e um serviço externo (Supabase). O `rules/restrictions.md`
+  exige aprovação para dependências e proíbe contrariar ADR aceito em silêncio.
+- **Alternativas defensáveis:** Pexels com recorte pelo próprio provedor (sem `sharp`);
+  imagens em `public/` no repositório; imagens no PostgreSQL; hotlink direto para o
+  Pixabay (não permitido pela documentação da API).
+- **Por que não ficou só na spec:** é uma escolha de arquitetura com custo de mudança
+  (trocar provedor ou hospedagem obriga a refazer a skill e as URLs), e a Spec 004 e a
+  skill dependem dela.
+- **O que ficou sem ADR, de propósito:** o hash `scrypt` do `node:crypto`, o seed em
+  JavaScript e a duração da sessão. São reversíveis, cabem no que o ADR-001 deixa em
+  aberto e estão nas specs 004 e 005. Se o hash ganhar parâmetros que afetem outros
+  sistemas, vale um ADR próprio.
 
 ## 4. A skill imagens-equipamentos
 _(rascunho; completar com os números reais depois da revisão visual)_
@@ -67,10 +103,25 @@ _(rascunho; completar com os números reais depois da revisão visual)_
 - Fotos reprovadas na revisão visual: quantas e por quê.
 
 ## 5. O subagente verificador
-- Como ele é acionado e por que esse gatilho (e não outro).
-- O que ele lê e por que precisa ler, em vez de herdar.
-- O que ele não consegue fazer e como isso é garantido no seu harness.
-- Monolito ou back/front: como a verificação cobre o seu caso.
+Arquivo: `.claude/agents/verificador-specs.md` (commit `973df73`).
+- **Como é acionado e por que esse gatilho:** pelo texto "Use SEMPRE antes de declarar
+  qualquer spec pronta" no `description` do subagente (que permite delegação automática) e
+  por uma regra sempre carregada: etapa 6 e seção "Verificação independente" de
+  `rules/spec-flow.md`, item 4 de `AGENTS.md` e `rules/handoff.md` (commit `46eb3df`).
+  Escolhi regra nos documentos que todo agente lê no início, em vez de depender de lembrança.
+  **Limite honesto:** é instrução, não trava mecânica. Um hook de fim de tarefa seria mais
+  forte e não foi feito.
+- **O que ele lê e por quê:** AGENTS.md, restrictions, a spec, o PRD, os ADRs, checks, tests
+  e o código, por conta própria. Recebe só o caminho da spec, para não herdar as conclusões
+  de quem implementou (contexto limpo); herdar tornaria a conferência uma releitura do que o
+  implementador já acredita.
+- **O que ele não consegue fazer:** não tem `Edit` nem `Write` (`tools: Read, Grep, Glob, Bash`),
+  então não altera arquivos nem corrige testes; a recusa do pedido do tech lead está na seção 1.
+  **Lacuna:** o Bash não é restrito tecnicamente; a proibição de `migrate`, `seed` e escrita em
+  banco está no prompt. Fechar com regras de `deny` nas permissões do harness continua pendente.
+- **Monolito ou back/front:** este repositório é um monólito (Next.js full-stack, ADR-001),
+  então um verificador cobre tudo: ele deriva os critérios da spec e roda `lint`, `test` e `build`,
+  que alcançam servidor e telas.
 
 ## 6. O verificador em ação
 - Histórico real: cada rodada que reprovou algo — o CA, a causa,
@@ -98,7 +149,35 @@ de verdade numa sessão nova antes de entregar.**
 - Prova com erro plantado: ainda não feita.
 
 ## 7. Uma regra sua que esta prática pôs à prova
-Uma rule, ADR ou instrução que se mostrou incompleta, errada ou em
-conflito com o que a prática pedia. O que aconteceu e o que você mudou.
+**`rules/spec-flow.md` não exigia nenhuma verificação independente.** Ela mandava implementar,
+testar e entregar; nada impedia o mesmo agente de implementar e declarar a spec pronta. A
+prática exigia exatamente o contrário ("nenhuma spec é declarada pronta sem passar pelo
+verificador"). **O que mudei:** etapa 6 e seção "Verificação independente" no `spec-flow.md`,
+item 4 no `AGENTS.md` e a tabela do verificador no `handoff.md` (commit `46eb3df`).
+
+Outros pontos que a prática expôs, sem mudar a rule ainda:
+- O enunciado cita um `rules/secrets.md` que não existe aqui; a proibição de segredos está só em
+  `restrictions.md` ("Segurança"). A regra cobre o caso, mas não nomeia o caso do seed com senha
+  padrão, que é onde o briefing pediu o contrário.
+- Os `rules` não dizem como tratar um pedido (briefing) que contraria o PRD. O `AGENTS.md` diz
+  que o briefing não é fonte de regra, mas a prática mostrou que falta um passo explícito:
+  levantar, decidir e registrar.
 
 ## 8. O que ficou de fora e o que faria diferente
+**Ficou de fora:**
+- **Spec 005 (autenticação) não implementada** e **Spec 006 (solicitar empréstimo) nem escrita.**
+  Sem isso, o professor não consegue entrar em produção nem solicitar um empréstimo. É o maior
+  item pendente.
+- Rodar o seed no banco do deploy e enviar as imagens ao Supabase: ações do usuário, fora do agente.
+- Rodar o `verificador-specs` de verdade (ele só carrega em sessão nova) e a prova com erro plantado.
+- Leitura da licença completa do Pixabay; o catálogo ficou sem crédito na tela por decisão do usuário.
+- Decisão sobre os alertas do `npm audit` (`next` crítico; `vite`, `zod`, `source-map-js` altos).
+- Gatilho mecânico (hook) e trava de comandos de banco nas permissões do harness.
+- Pequenos desvios nas fotos: TI-0004 mostra notebook aberto (não fechado), TI-0009 é USB-A.
+
+**O que faria diferente:**
+- Ler o enunciado inteiro procurando conflitos antes de escolher a fonte das imagens, em vez de
+  recomendar o Pexels sem ter lido a documentação.
+- Criar o subagente verificador em uma sessão anterior ao uso, porque agentes só carregam no início.
+- Subir o banco local no começo. Descobrir o Docker desligado atrasou os testes.
+- Escrever a spec de autenticação junto com a de dados iniciais, já que uma depende da outra.
