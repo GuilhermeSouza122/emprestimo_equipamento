@@ -91,7 +91,7 @@ export async function executarSeed(prisma, { equipamentos, senha, existeImagem, 
         // A situação só é definida na criação: não desfaz um empréstimo em andamento.
         await tx.equipamento.update({
           where: { patrimonio: equipamento.patrimonio },
-          data: { nome: equipamento.nome, categoria: equipamento.categoria, situacao: equipamento.situacao, imagemArquivo: equipamento.imagemArquivo },
+          data: { nome: equipamento.nome, categoria: equipamento.categoria, imagemArquivo: equipamento.imagemArquivo },
         });
       } else {
         await tx.equipamento.create({ data: equipamento });
