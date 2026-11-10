@@ -186,8 +186,8 @@ comportamento foi reprovado. Resumo das tabelas devolvidas:
 
 | Spec | Aprovados | Pendentes | Parecer |
 |------|-----------|-----------|---------|
-| 004 | DADOS-02, 03, 04, 05, 06 e 09 | DADOS-01 (migrations do zero), DADOS-07 (URL pública em produção, manual do usuário), DADOS-08 | Reprovada por ambiente: `npm run build` falhou com EPERM |
-| 005 | AUTH-01 a AUTH-08 | AUTH-09 | Pendente: build, `npm audit` e migrations do zero |
+| 004 | DADOS-01 a 06, 08 (esta rodada) e 09 | DADOS-07 (URL pública em produção: parte manual; conferida por HTTP em 2026-11-10, ver Spec 004) | Pendente só pelo DADOS-07 |
+| 005 | AUTH-01 a AUTH-09 | nenhum | **APROVADA** (segunda rodada, build OK) |
 | 006 | EMP-01 a EMP-14 (todos) | nenhum | **APROVADA** (rodada posterior, com o build já liberado) |
 
 - **Causa do build:** `EPERM` em `.next` (rmdir). Era um `next dev` que eu mantinha ligado na outra sessão, travando a
@@ -210,8 +210,13 @@ comportamento foi reprovado. Resumo das tabelas devolvidas:
   (`dal.ts`) só tinha leitura de código; agora tem `dal.test.ts` (sem cookie, cookie inválido, sessão
   revogada, colaborador e Operações); (3) o texto "recusado no servidor" foi esclarecido (redireciona na
   página e devolve `FORBIDDEN` na API).
-- **Aberto:** como o código mudou, falta uma nova rodada do verificador sobre as Specs 004 e 005 para os
-  pareceres virarem APROVADA. DADOS-07 (URL pública em produção) e o seed no deploy dependem do usuário.
+- **Segunda rodada, depois das correções:** Spec 005 **APROVADA** (AUTH-01 a AUTH-09; `lint`, 77 testes e
+  `npm run build` OK). Spec 004 com todos os critérios aprovados, inclusive DADOS-01 e DADOS-08 desta rodada;
+  o parecer ficou PENDENTE só no DADOS-07, que o verificador atribui ao usuário. A prova (12 URLs públicas
+  respondendo 200, mesmo tamanho dos arquivos) está na Spec 004 com o comando para repeti-la. Os testes
+  passaram de 69 para 77 porque acrescentei `contexto.test.ts` e `dal.test.ts` entre as rodadas.
+- **Aberto:** uma rodada curta do verificador na Spec 004, pedindo que ele rode os `curl -I` da Spec, para o
+  DADOS-07 sair de PENDENTE; e o que depende do usuário (push, migrations e seed no deploy, variáveis na Vercel).
 
 ## 7. Uma regra sua que esta prática pôs à prova
 **`rules/spec-flow.md` não exigia nenhuma verificação independente.** Ela mandava implementar,

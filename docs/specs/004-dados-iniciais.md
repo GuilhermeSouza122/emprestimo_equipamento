@@ -81,6 +81,10 @@ usuário de Operações, envio de imagens ao Supabase (feito pelo usuário).
 - **DADOS-07:** cada equipamento aponta para um arquivo existente em `data/imagens/`
   com 800×600 (conferido por `validar.mjs`); em produção, a URL pública de cada
   imagem abre sem login (conferência manual do usuário).
+  **Conferido em 2026-11-10** por requisição HTTP sem login ao bucket público `equipamentos` do
+  Supabase: as 12 URLs responderam 200 `image/jpeg`, com o mesmo tamanho em bytes dos arquivos de
+  `data/imagens/`. Base pública (sem segredo): `https://vjohloojdffnoflctghb.supabase.co/storage/v1/object/public/equipamentos`. Para repetir: `curl -I https://vjohloojdffnoflctghb.supabase.co/storage/v1/object/public/equipamentos/TI-0001.jpg`
+  até `TI-0012.jpg` (e comparar o `content-length` com `data/imagens/`).
 - **DADOS-08:** a spec passa pelo subagente `verificador-specs` antes de ser dada
   como pronta.
 - **DADOS-09:** com `SEED_TESTE_EMAIL` e `SEED_TESTE_PASSWORD`, o seed cria uma conta de

@@ -9,12 +9,12 @@ do Next citados nos alertas (`next/image`, SVG, `use cache`, Server Actions); `z
 
 **Implementação (2026-11-10):** feita e verificada por `lint`, `tsc`, `npm test` e
 `npm run build`, mais um teste ponta a ponta local (curl e navegador) com usuários
-temporários, já removidos. **Verificação independente:** o `verificador-specs` rodou numa
-sessão nova e aprovou AUTH-01 a AUTH-08, sem reprovar nenhum critério. O parecer ficou
-PENDENTE por `npm run build` (EPERM em `.next`, causado por um `next dev` aberto; já liberado),
-`npm audit` (decisão ainda aberta) e migrations do zero (agora coberto por
-`src/server/migracoes.test.ts`). Consta como "implementada, verificação pendente" até uma
-nova rodada dar APROVADA (`rules/spec-flow.md`).
+temporários, já removidos. **Verificação independente: APROVADA** (`verificador-specs`, segunda rodada, sessão nova,
+2026-11-10): AUTH-01 a AUTH-08 com evidência de código e de testes, `lint`, `npm test` (77 testes),
+`npm run build` e `git diff --check` passaram. O `npm audit` tem alertas cobertos pelo risco aceito
+acima. Ressalva dele: não há teste de navegador para o redirecionamento do login até `/catalogo`
+(conferido só no código e no teste manual desta spec). Na primeira rodada o parecer ficou PENDENTE
+por `npm run build` (EPERM em `.next`, já mitigado) e por migrations do zero (agora com teste).
 
 ## Objetivo e vínculo
 
