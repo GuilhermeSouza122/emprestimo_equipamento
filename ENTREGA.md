@@ -197,7 +197,7 @@ Outros pontos que a prática expôs, sem mudar a rule ainda:
 
 ## 8. O que ficou de fora e o que faria diferente
 **Ficou de fora:**
-- **Specs 005 e 006 implementadas, mas sem verificação independente.** Falta rodar o 
+- **Specs 005 e 006 implementadas, mas sem verificação independente.** Falta rodar o `verificador-specs`
   (só carrega em sessão nova) sobre as Specs 004, 005 e 006 e anexar as tabelas finais à seção 6.
 - **Sem devolução.** Um item emprestado continua assim, então o estoque de teste é consumido (9 itens
   disponíveis); liberar itens em produção é ação do usuário no banco. Operações segue com dados de exemplo.
