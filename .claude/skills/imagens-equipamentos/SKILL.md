@@ -64,6 +64,15 @@ Repetir os passos é seguro: arquivos e créditos são nomeados pelo patrimônio
 | Sem chave no git | **Código** (`validar.mjs` procura a chave; `.gitignore`) + **instrução** |
 | Crédito visível na tela | **Decisão do usuário: não há crédito na tela** (briefing do catálogo, item 9). A autoria fica só em `creditos.json` |
 
+## Conferência depois do envio (só leitura)
+
+Depois que o **usuário** publicar os arquivos no bucket público, qualquer um pode conferir que o que está
+no ar é idêntico ao preparado, sem credenciais:
+```bash
+node .claude/skills/imagens-equipamentos/scripts/conferir-remoto.mjs <URL-base-publica>
+```
+O script só faz `GET` e compara o `sha256`; ele não envia nada.
+
 ## Referências
 
 - `references/pixabay-api.md`: parâmetros, campos e limites da API.

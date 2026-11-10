@@ -215,8 +215,12 @@ comportamento foi reprovado. Resumo das tabelas devolvidas:
   o parecer ficou PENDENTE só no DADOS-07, que o verificador atribui ao usuário. A prova (12 URLs públicas
   respondendo 200, mesmo tamanho dos arquivos) está na Spec 004 com o comando para repeti-la. Os testes
   passaram de 69 para 77 porque acrescentei `contexto.test.ts` e `dal.test.ts` entre as rodadas.
-- **Aberto:** uma rodada curta do verificador na Spec 004, pedindo que ele rode os `curl -I` da Spec, para o
-  DADOS-07 sair de PENDENTE; e o que depende do usuário (push, migrations e seed no deploy, variáveis na Vercel).
+- **DADOS-07 aprovado pelo verificador** numa rodada curta (12 URLs públicas, `content-length` igual ao local;
+  ele apontou que o tamanho é prova fraca). Reforcei com `conferir-remoto.mjs`: `sha256` das 12 idênticas.
+  Como essa rodada olhou só o DADOS-07 e o build dele passou de 120 s (o OneDrive deixa o build lento), a
+  Spec 004 inteira ainda não tem um parecer APROVADA único.
+- **Aberto:** uma última rodada completa do verificador na Spec 004, esperando o build terminar; e o que
+  depende do usuário (push, migrations e seed no deploy, variáveis na Vercel).
 
 ## 7. Uma regra sua que esta prática pôs à prova
 **`rules/spec-flow.md` não exigia nenhuma verificação independente.** Ela mandava implementar,

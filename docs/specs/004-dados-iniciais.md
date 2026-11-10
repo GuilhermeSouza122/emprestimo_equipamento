@@ -83,8 +83,11 @@ usuário de Operações, envio de imagens ao Supabase (feito pelo usuário).
   imagem abre sem login (conferência manual do usuário).
   **Conferido em 2026-11-10** por requisição HTTP sem login ao bucket público `equipamentos` do
   Supabase: as 12 URLs responderam 200 `image/jpeg`, com o mesmo tamanho em bytes dos arquivos de
-  `data/imagens/`. Base pública (sem segredo): `https://vjohloojdffnoflctghb.supabase.co/storage/v1/object/public/equipamentos`. Para repetir: `curl -I https://vjohloojdffnoflctghb.supabase.co/storage/v1/object/public/equipamentos/TI-0001.jpg`
-  até `TI-0012.jpg` (e comparar o `content-length` com `data/imagens/`).
+  `data/imagens/`. Base pública (sem segredo): `https://vjohloojdffnoflctghb.supabase.co/storage/v1/object/public/equipamentos`. Para repetir: `curl -I https://vjohloojdffnoflctghb.supabase.co/storage/v1/object/public/equipamentos/TI-0001.jpg` até `TI-0012.jpg` (comparar o
+  `content-length` com `data/imagens/`) e, para provar o **conteúdo**, não só o tamanho,
+  `node .claude/skills/imagens-equipamentos/scripts/conferir-remoto.mjs https://vjohloojdffnoflctghb.supabase.co/storage/v1/object/public/equipamentos`, que baixa as 12
+  e compara o `sha256` com os arquivos locais e com `creditos.json` (só leitura). Resultado em
+  2026-11-10: 12 de 12 idênticas. O verificador também aprovou o DADOS-07 pelo `content-length`.
 - **DADOS-08:** a spec passa pelo subagente `verificador-specs` antes de ser dada
   como pronta.
 - **DADOS-09:** com `SEED_TESTE_EMAIL` e `SEED_TESTE_PASSWORD`, o seed cria uma conta de
