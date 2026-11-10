@@ -146,7 +146,31 @@ de verdade numa sessão nova antes de entregar.**
   descartável, depois removido; seed duas vezes, 12 equipamentos e 1 usuário.
 - Ainda aberto: `npm audit --audit-level=high` acusa `next` (crítico), `vite`, `zod` e
   `source-map-js` (altos), anteriores a esta prática; exigem decisão explícita.
-- Prova com erro plantado: ainda não feita.
+- Prova com erro plantado: feita, ver a próxima subseção.
+
+### Prova com erro plantado (verificador de verdade, sessão nova)
+- **O que plantei** (commit `900d31a`): em `prisma/seed-lib.mjs`, o `update` do seed passou a
+  regravar a `situacao` de equipamento já cadastrado. Em produção isso desfaria um empréstimo
+  em andamento a cada novo seed e viola o **DADOS-04**. Com o erro, o teste
+  `nao altera a situacao de equipamento ja cadastrado` falha (1 falha, 18 passam).
+- **Tabela que voltou** (resumo devolvido pelo `verificador-specs`, parecer REPROVADA):
+
+| CA | Veredito | Resumo |
+|----|----------|--------|
+| DADOS-01 | Pendente | Migration e índices únicos certos. Falta aplicar `prisma migrate deploy` em PostgreSQL vazio e descartável (feito por mim fora do verificador, ver rodada 1) |
+| DADOS-02 | Aprovado | 12 itens (4 notebooks, 3 monitores, 3 cabos, 2 câmeras); TI-0004, TI-0007 e TI-0010 em manutenção; testes passaram |
+| DADOS-03 | Aprovado | Usuário do professor correto, hash `scrypt`, sem tabela de empréstimos |
+| **DADOS-04** | **Reprovado** | `prisma/seed-lib.mjs:92-96` grava `situacao` no update de equipamento existente; `src/server/seed.test.ts:148-160` falhou com `expected 'disponivel' to be 'emprestado'` |
+| DADOS-05 | Aprovado | Recusa banco remoto sem `--producao` e não imprime segredos |
+| DADOS-06 | Aprovado | A senha só aparece como valor de exemplo no `.env.example` |
+| DADOS-07 | Pendente | 12 imagens passaram no validador local; a URL pública sem login no Supabase é conferência manual do usuário |
+| DADOS-08 | Pendente | Só se cumpre com o parecer APROVADA |
+
+- **Confirmação do desfazer** (commit `c4d075d`, reverte `900d31a`): o seed voltou a não regravar
+  a situação; a diferença de `prisma/` em relação ao estado anterior ao erro é vazia e os testes
+  voltaram a 19 de 19. **Os dois commits:** erro `900d31a`, desfazer `c4d075d`.
+- **Falta:** uma segunda rodada do verificador sobre o código já corrigido, com a tabela final
+  da Spec 004 (e da Spec 006 quando existir). Só o parecer APROVADA permite dar a spec como pronta.
 
 ## 7. Uma regra sua que esta prática pôs à prova
 **`rules/spec-flow.md` não exigia nenhuma verificação independente.** Ela mandava implementar,
