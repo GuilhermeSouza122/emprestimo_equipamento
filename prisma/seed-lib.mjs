@@ -127,5 +127,7 @@ export async function executarSeed(prisma, { equipamentos, senha, existeImagem, 
       usuarioCriado: Boolean(senhaHash),
       contaTesteCriada: Boolean(testeHash),
     };
-  });
+    // Banco remoto (ex.: Supabase em outra região): cada consulta leva centenas de ms, e o limite
+    // padrão de 5 s da transação interativa estoura (P2028). O seed roda uma vez; pode esperar.
+  }, { maxWait: 30_000, timeout: 120_000 });
 }

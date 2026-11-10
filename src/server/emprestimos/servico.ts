@@ -69,7 +69,9 @@ export async function solicitarEmprestimo(
       data: { usuarioId, equipamentoId: equipamento.id, solicitadoEm: agora(), devolucaoPrevistaEm: dataDoIso(devolucaoPrevista) },
     });
     return { patrimonio: equipamento.patrimonio, nome: equipamento.nome, devolucaoPrevista };
-  });
+    // Com o banco em outra região, as ~7 consultas da transação passam fácil de 5 s sob carga
+    // (limite padrão do Prisma). 20 s dá folga sem segurar a trava do usuário por muito tempo.
+  }, { maxWait: 10_000, timeout: 20_000 });
 }
 
 export type EmprestimoAberto = {
