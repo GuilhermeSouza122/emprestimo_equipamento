@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { exigirUsuario } from "../../../../server/auth/dal";
 import { AppHeader, Breadcrumb, ItemCounter } from "../../../_components/nocturne/app-header";
 import { buscarEquipamento, equipamentos } from "../../../_components/nocturne/sample-data";
 import shell from "../../../_components/nocturne/shell.module.css";
@@ -22,6 +23,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function EquipmentDetailPage({ params }: Props) {
+  await exigirUsuario();
   const { patrimonio } = await params;
   const item = buscarEquipamento(patrimonio);
   if (!item) notFound();

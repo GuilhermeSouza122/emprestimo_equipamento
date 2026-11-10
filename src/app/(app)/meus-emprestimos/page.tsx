@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { exigirUsuario } from "../../../server/auth/dal";
 import { AppHeader, Breadcrumb } from "../../_components/nocturne/app-header";
 import { Icon } from "../../_components/nocturne/icons";
 import type { Categoria } from "../../_components/nocturne/sample-data";
@@ -22,7 +23,8 @@ const historico = [
   { nome: "Sony A7 III", patrimonio: "PAT-0233", retirada: "15/jul", devolucao: "02/ago", situacao: "Atraso de 2 dias", ok: false },
 ];
 
-export default function MyLoansPage() {
+export default async function MyLoansPage() {
+  await exigirUsuario();
   return (
     <>
       <AppHeader

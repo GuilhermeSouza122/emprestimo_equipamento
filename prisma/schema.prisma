@@ -38,8 +38,22 @@ model Usuario {
   papel     Papel
   senhaHash String   @map("senha_hash")
   createdAt DateTime @default(now()) @map("created_at")
+  sessoes   Sessao[]
 
   @@map("usuarios")
+}
+
+model Sessao {
+  id         Int       @id @default(autoincrement())
+  tokenHash  String    @unique @map("token_hash")
+  usuarioId  Int       @map("usuario_id")
+  usuario    Usuario   @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  createdAt  DateTime  @default(now()) @map("created_at")
+  expiraEm   DateTime  @map("expira_em")
+  revogadaEm DateTime? @map("revogada_em")
+
+  @@index([usuarioId])
+  @@map("sessoes")
 }
 
 model Equipamento {

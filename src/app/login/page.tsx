@@ -27,7 +27,7 @@ export default function LoginPage() {
             <div className={styles.brandRule} />
             <div className={styles.numbers}>
               <div><p className={styles.number}>3</p><p className={styles.numberLabel}>itens por pessoa</p></div>
-              <div><p className={styles.number}>14</p><p className={styles.numberLabel}>dias de prazo</p></div>
+              <div><p className={styles.number}>14</p><p className={styles.numberLabel}>dias úteis de prazo</p></div>
             </div>
           </div>
 

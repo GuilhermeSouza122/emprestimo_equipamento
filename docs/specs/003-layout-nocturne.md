@@ -45,10 +45,11 @@ e header de 64 px.
 
 ## Limites e casos de erro
 
-- Não há autenticação nem autorização: as telas de Operações estão acessíveis a
-  qualquer visitante nesta versão estática, e os dados são fictícios. Antes de
-  conectar dados reais, proteger as rotas no servidor conforme
-  `rules/restrictions.md`.
+- ~~Não há autenticação nem autorização.~~ **Substituído pela Spec 005 (AUTH-05):** as
+  telas 02 a 06 exigem sessão válida e as de Operações exigem o papel `operacoes`,
+  verificados no servidor. A barra lateral esconde o grupo "Operações" para
+  colaboradores (conveniência; a proteção real é a do servidor). Os dados continuam
+  fictícios.
 - Regras de negócio (3 itens, 14 dias úteis, bloqueio por atraso) aparecem na interface
   como informação; não são impostas por back-end.
 - Patrimônio inexistente em `/catalogo/[patrimonio]` retorna 404.

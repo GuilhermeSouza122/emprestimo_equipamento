@@ -1,7 +1,14 @@
 # Spec 005 — Autenticação (login, sessão e papéis)
 
-**Status:** proposta de 2026-11-10, aguardando aprovação. Nenhum código de
-funcionalidade deve ser escrito antes dela.
+**Status:** aprovada pelo usuário em 2026-11-10, incluindo as dependências
+`@trpc/server` e `@trpc/client` (versões exatas) e as decisões da tabela abaixo.
+A decisão sobre os alertas do `npm audit` continua aberta.
+
+**Implementação (2026-11-10):** feita e verificada por `lint`, `tsc`, `npm test` e
+`npm run build`, mais um teste ponta a ponta local (curl e navegador) com usuários
+temporários, já removidos. **Verificação independente pendente:** o
+`verificador-specs` ainda não rodou sobre esta spec, então ela consta como
+"implementada, verificação pendente" (`rules/spec-flow.md`).
 
 ## Objetivo e vínculo
 

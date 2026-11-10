@@ -1,9 +1,12 @@
 "use client";
 
+import { TRPCClientError } from "@trpc/client";
+import { useRouter } from "next/navigation";
 import { useRef, useState, useSyncExternalStore } from "react";
 import type { FormEvent } from "react";
 
 import { Icon } from "../_components/nocturne/icons";
+import { trpc } from "../_lib/trpc-client";
 import styles from "./login.module.css";
 
 const subscribeToHydration = () => () => undefined;
@@ -14,16 +17,19 @@ type FieldErrors = { email?: string; password?: string };
 
 export function LoginForm() {
   // Keep the form disabled until submit interception is available, including
-  // when JavaScript is disabled. This interface must never send credentials.
+  // when JavaScript is disabled: without JavaScript the form never sends credentials.
   const hydrated = useSyncExternalStore(subscribeToHydration, clientSnapshot, serverSnapshot);
+  const router = useRouter();
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [errors, setErrors] = useState<FieldErrors>({});
   const [feedback, setFeedback] = useState("");
+  const [sending, setSending] = useState(false);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (sending) return;
     const email = emailRef.current;
     const password = passwordRef.current;
     if (!email || !password) return;
@@ -44,16 +50,26 @@ export function LoginForm() {
       return;
     }
 
-    setFeedback("O acesso ainda não está disponível. A autenticação será conectada em uma próxima etapa; nenhum dado foi enviado.");
+    setSending(true);
+    try {
+      await trpc.auth.entrar.mutate({ email: email.value, senha: password.value });
+      router.replace("/catalogo");
+      router.refresh();
+    } catch (error) {
+      password.value = "";
+      if (error instanceof TRPCClientError && error.data?.code === "UNAUTHORIZED") {
+        setFeedback(error.message);
+      } else {
+        setFeedback("Não foi possível entrar agora. Tente novamente em instantes.");
+      }
+      password.focus();
+      setSending(false);
+    }
   }
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit} method="post" noValidate aria-labelledby="login-title" aria-describedby="login-availability">
-      <p className={styles.availability} id="login-availability">
-        <Icon name="info" size={16} />
-        <span><strong>Autenticação em desenvolvimento.</strong> Esta tela ainda não permite entrar no sistema.</span>
-      </p>
-      <noscript><p className={styles.feedback}>Ative o JavaScript para interagir com esta prévia.</p></noscript>
+    <form className={styles.form} onSubmit={handleSubmit} method="post" noValidate aria-labelledby="login-title" aria-busy={sending}>
+      <noscript><p className={styles.feedback}>Ative o JavaScript para entrar no sistema.</p></noscript>
 
       <fieldset className={styles.fieldset} disabled={!hydrated}>
         <legend className={styles.srOnly}>Dados de acesso</legend>
@@ -78,7 +94,7 @@ export function LoginForm() {
           {errors.password ? <p className={styles.error} id="login-password-error" role="alert">{errors.password}</p> : null}
         </div>
 
-        <button className={styles.submit} type="submit">Entrar <Icon name="arrow-right" size={16} /></button>
+        <button className={styles.submit} type="submit" disabled={sending}>{sending ? "Entrando…" : "Entrar"} <Icon name="arrow-right" size={16} /></button>
       </fieldset>
 
       <div aria-live="polite" aria-atomic="true">

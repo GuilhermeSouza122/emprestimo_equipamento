@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 
+import { exigirOperacoes } from "../../../../../server/auth/dal";
 import { AppHeader, Breadcrumb } from "../../../../_components/nocturne/app-header";
 import shell from "../../../../_components/nocturne/shell.module.css";
 import { NewEquipmentForm } from "./new-equipment-form";
 
 export const metadata: Metadata = { title: "Cadastrar equipamento | EmpresTI" };
 
-export default function NewEquipmentPage() {
+export default async function NewEquipmentPage() {
+  await exigirOperacoes();
   return (
     <>
       <AppHeader

@@ -1,8 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useState } from "react";
 
+import type { UsuarioPublico } from "../../../server/auth/sessao";
+import { trpc } from "../../_lib/trpc-client";
 import { Icon } from "./icons";
 import type { IconName } from "./icons";
 import styles from "./shell.module.css";
@@ -26,8 +29,30 @@ const groups: { label: string; items: NavItem[] }[] = [
   },
 ];
 
-export function Sidebar() {
+function iniciais(nome: string) {
+  const partes = nome.trim().split(/\s+/).filter(Boolean);
+  if (partes.length === 0) return "?";
+  const primeira = partes[0][0];
+  const ultima = partes.length > 1 ? partes[partes.length - 1][0] : "";
+  return `${primeira}${ultima}`.toUpperCase();
+}
+
+export function Sidebar({ usuario }: { usuario: UsuarioPublico | null }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const [saindo, setSaindo] = useState(false);
+  // Esconder o grupo não é proteção: as rotas de Operações são recusadas no servidor.
+  const visiveis = groups.filter((group) => group.label !== "Operações" || usuario?.papel === "operacoes");
+
+  async function sair() {
+    setSaindo(true);
+    try {
+      await trpc.auth.sair.mutate();
+    } finally {
+      router.replace("/login");
+      router.refresh();
+    }
+  }
 
   return (
     <aside className={styles.sidebar}>
@@ -37,7 +62,7 @@ export function Sidebar() {
       </Link>
 
       <nav className={styles.nav} aria-label="Principal">
-        {groups.map((group) => (
+        {visiveis.map((group) => (
           <div key={group.label} className={styles.group}>
             <p className={styles.groupLabel}>{group.label}</p>
             {group.items.map((item) => {
@@ -60,11 +85,14 @@ export function Sidebar() {
       </nav>
 
       <div className={styles.user}>
-        <span className={styles.avatar} aria-hidden="true">MA</span>
+        <span className={styles.avatar} aria-hidden="true">{usuario ? iniciais(usuario.nome) : "?"}</span>
         <div>
-          <p className={styles.userName}>Marina Alves</p>
-          <p className={styles.userRole}>Design</p>
+          <p className={styles.userName}>{usuario?.nome ?? "Visitante"}</p>
+          <p className={styles.userRole}>{usuario?.papel === "operacoes" ? "Operações" : "Colaborador"}</p>
         </div>
+        <button type="button" className={styles.signOut} onClick={sair} disabled={saindo}>
+          {saindo ? "Saindo…" : "Sair"}
+        </button>
       </div>
     </aside>
   );

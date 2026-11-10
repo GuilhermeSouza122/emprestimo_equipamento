@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { obterUsuarioAtual } from "../../server/auth/dal";
 import { NocturneRoot } from "../_components/nocturne/root";
 import { Sidebar } from "../_components/nocturne/sidebar";
 import shell from "../_components/nocturne/shell.module.css";
@@ -9,11 +10,15 @@ export const metadata: Metadata = {
   description: "Catálogo, empréstimos e operações de equipamentos internos.",
 };
 
-export default function AppLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function AppLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  // Só para mostrar o usuário na barra lateral. A proteção de verdade está em cada página
+  // (exigirUsuario/exigirOperacoes), porque layouts não rodam de novo a cada navegação.
+  const usuario = await obterUsuarioAtual();
+
   return (
     <NocturneRoot>
       <div className={shell.app}>
-        <Sidebar />
+        <Sidebar usuario={usuario} />
         <div className={shell.main}>{children}</div>
       </div>
     </NocturneRoot>

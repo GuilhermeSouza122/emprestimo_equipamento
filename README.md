@@ -8,13 +8,19 @@ Sistema interno descrito em [PRD](docs/PRD.md). A stack aprovada está no
 
 - Homepage informativa e responsiva conforme [Spec 001](docs/specs/001-homepage.md),
   no visual Nocturne/EmpresTI.
-- Interface de login em `/login`, acessível pelo botão "Entrar" da homepage,
-  conforme [Spec 002](docs/specs/002-tela-login.md). Tem validação local e controle
-  de visibilidade da senha, mas não envia credenciais nem autentica usuários.
+- Login real em `/login`, acessível pelo botão "Entrar" da homepage
+  ([Spec 002](docs/specs/002-tela-login.md) para a interface e
+  [Spec 005](docs/specs/005-autenticacao.md) para a autenticação): e-mail e senha,
+  sessão de 8 horas guardada no PostgreSQL e cookie `HttpOnly`, via tRPC em `/api/trpc`
+  (`auth.entrar`, `auth.eu`, `auth.sair`). `/catalogo`, `/meus-emprestimos` e
+  `/operacoes/*` exigem sessão; `/operacoes/*` exige o papel `operacoes`, sempre
+  verificado no servidor. Exige `SESSION_SECRET` (em produção, pelo menos 32
+  caracteres, no painel da Vercel). Não há limite de tentativas de login.
 - Telas do layout Nocturne/EmpresTI conforme [Spec 003](docs/specs/003-layout-nocturne.md):
   catálogo, detalhe do item, meus empréstimos, empréstimos em aberto e cadastro de
-  equipamento, em modo escuro. São estáticas, com dados de exemplo: não leem nem
-  gravam no banco e não têm autenticação. O login (`/login`) usa o mesmo visual.
+  equipamento, em modo escuro. Os dados são de exemplo: não leem nem gravam no
+  banco. Exigem login, e as de Operações exigem o papel de Operações. O login
+  (`/login`) usa o mesmo visual.
 - Endpoint operacional `GET /health`, consultado pela homepage, e integração
   com PostgreSQL via Prisma.
 - Migration inicial e teste de integração do endpoint de saúde com Vitest.
@@ -24,9 +30,9 @@ Sistema interno descrito em [PRD](docs/PRD.md). A stack aprovada está no
   `data/imagens/`; o catálogo ainda não as exibe e o envio ao Supabase é manual.
 - Aplicação e banco configurados para Docker Compose.
 
-Autenticação real, sessões, procedimentos tRPC, catálogo e fluxos reais de empréstimo,
-devolução e Operações ainda não estão implementados. Aprovação da stack não
-significa que esses fluxos já funcionam.
+O catálogo real, os fluxos de empréstimo e devolução e as telas de Operações com dados
+do banco ainda não estão implementados. Aprovação da stack não significa que esses
+fluxos já funcionam.
 
 ## Preparar o ambiente
 
