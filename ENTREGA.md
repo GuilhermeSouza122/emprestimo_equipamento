@@ -94,6 +94,9 @@ _(rascunho; completar com os números reais depois da revisão visual)_
   aprovação das 12 finais pelo usuário.
 - Resultado: 12 imagens 800×600 em `data/imagens/`, `validar.mjs` com `OK`,
   segunda execução de `preparar.mjs` sem alterar nada (idempotente).
+- Envio ao Supabase (feito pelo usuário, nunca pelo agente): bucket público `equipamentos` com os 12
+  arquivos. Conferido por requisição HTTP sem login em 2026-11-10: as 12 URLs públicas respondem 200
+  `image/jpeg`, com o mesmo tamanho em bytes dos arquivos de `data/imagens/` (DADOS-07, parte de produção).
 - Limites conhecidos: TI-0004 (item "em manutenção") mostra um notebook aberto, não
   fechado como a busca pedia; TI-0009 mostra um conector USB-A, não USB-C; TI-0006
   e TI-0007 são do mesmo autor e estilo parecido.
