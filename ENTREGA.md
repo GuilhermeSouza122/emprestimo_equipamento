@@ -223,7 +223,22 @@ Outros pontos que a prática expôs, sem mudar a rule ainda:
 - Rodar o seed no banco do deploy e enviar as imagens ao Supabase: ações do usuário, fora do agente.
 - Rodar o `verificador-specs` de verdade (ele só carrega em sessão nova) e a prova com erro plantado.
 - Leitura da licença completa do Pixabay; o catálogo ficou sem crédito na tela por decisão do usuário.
-- Decisão sobre os alertas do `npm audit` (`next` crítico; `vite`, `zod`, `source-map-js` altos).
+- **Decisão sobre o `npm audit` (2026-11-10): risco aceito pelo usuário, sem atualizar dependências.**
+  `rules/checks.md` pede correção ou decisão explícita, e proíbe atualização forçada. Os alertas são
+  anteriores a esta prática e nenhuma dependência nova os introduziu (`sharp` e `@trpc/*` não aparecem).
+  Alternativas: atualizar `next` para 16.4.6 (mesma versão major) e rodar `npm audit fix` sem `--force`;
+  ou aceitar. Foi escolhido aceitar. Justificativa por alerta:
+  - `next` (3 alertas, 1 crítico de RCE em otimização de imagem com SVG, 1 crítico de RCE em funções
+    `use cache`, 1 alto de DoS com Server Actions): o projeto não usa `next/image`, SVG nem configuração de
+    imagens (fotos são `<img>` com URL do Supabase), não usa `use cache` nem Server Actions (busca no
+    código sem ocorrências). Risco reduzido, **não zero**: é a única parte que roda em produção.
+  - `zod` (alto, DoS por memória): só entra por `eslint-config-next` (ferramenta de lint); o app não
+    importa `zod` (as validações são funções próprias).
+  - `vite` (alto): só entra por `vitest` (testes, ambiente de desenvolvimento); o servidor do Vite não é
+    executado nem exposto.
+  - `source-map-js` (alto, DoS): entra pelo `postcss` do `next`, em tempo de build, não em execução.
+  **Reavaliar** antes de qualquer uso real além da correção (por exemplo, ao ativar `next/image`,
+  Server Actions ou `use cache`) ou ao atualizar o Next, que é a correção recomendada.
 - Gatilho mecânico (hook) e trava de comandos de banco nas permissões do harness.
 - Pequenos desvios nas fotos: TI-0004 mostra notebook aberto (não fechado), TI-0009 é USB-A.
 

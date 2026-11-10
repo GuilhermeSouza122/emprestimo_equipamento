@@ -2,7 +2,10 @@
 
 **Status:** aprovada pelo usuário em 2026-11-10, incluindo as dependências
 `@trpc/server` e `@trpc/client` (versões exatas) e as decisões da tabela abaixo.
-A decisão sobre os alertas do `npm audit` continua aberta.
+Alertas do `npm audit`: **risco aceito pelo usuário em 2026-11-10**, sem atualizar
+dependências (justificativa por alerta no `ENTREGA.md`, seção 8). O app não usa os recursos
+do Next citados nos alertas (`next/image`, SVG, `use cache`, Server Actions); `zod`, `vite` e
+`source-map-js` só entram por lint, testes e build.
 
 **Implementação (2026-11-10):** feita e verificada por `lint`, `tsc`, `npm test` e
 `npm run build`, mais um teste ponta a ponta local (curl e navegador) com usuários
@@ -117,7 +120,8 @@ esta spec não os resolve e exige decisão explícita sobre eles (`rules/checks.
 
 ## Plano e verificação
 
-1. Aprovar esta spec e as dependências, e decidir sobre os alertas do `npm audit`.
+1. Aprovar esta spec e as dependências, e decidir sobre os alertas do `npm audit` (decidido:
+   risco aceito, ver o status no topo).
 2. Ler `node_modules/next/dist/docs/` sobre cookies e proteção de rotas desta versão
    do Next.js, que o `AGENTS.md` avisa ter mudanças incompatíveis, antes de escrever
    a proteção.
