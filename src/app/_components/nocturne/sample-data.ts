@@ -33,7 +33,7 @@ export const equipamentos: Equipamento[] = [
     ultimaDevolucao: "30/ago",
     historico: [
       { data: "30/ago", evento: "Devolvido por Bruno Kato", resultado: "No prazo" },
-      { data: "16/ago", evento: "Retirado por Bruno Kato", resultado: "Prazo de 14 dias" },
+      { data: "16/ago", evento: "Retirado por Bruno Kato", resultado: "Prazo de 14 dias úteis" },
       { data: "02/ago", evento: "Devolvido por Ana Sato", resultado: "No prazo" },
     ],
   },
@@ -47,7 +47,7 @@ export const equipamentos: Equipamento[] = [
     ultimaDevolucao: "26/ago",
     historico: [
       { data: "26/ago", evento: "Devolvido por Ana Sato", resultado: "No prazo" },
-      { data: "12/ago", evento: "Retirado por Ana Sato", resultado: "Prazo de 14 dias" },
+      { data: "12/ago", evento: "Retirado por Ana Sato", resultado: "Prazo de 14 dias úteis" },
     ],
   },
   {
@@ -61,7 +61,7 @@ export const equipamentos: Equipamento[] = [
     devolucao: "12/set",
     ultimaDevolucao: "20/ago",
     historico: [
-      { data: "29/ago", evento: "Retirado por Rafael Lima", resultado: "Prazo de 14 dias" },
+      { data: "29/ago", evento: "Retirado por Rafael Lima", resultado: "Prazo de 14 dias úteis" },
       { data: "20/ago", evento: "Devolvido por Tiago Menezes", resultado: "No prazo" },
     ],
   },
@@ -76,7 +76,7 @@ export const equipamentos: Equipamento[] = [
     devolucao: "11/set",
     ultimaDevolucao: "14/ago",
     historico: [
-      { data: "28/ago", evento: "Retirado por Marina Alves", resultado: "Prazo de 14 dias" },
+      { data: "28/ago", evento: "Retirado por Marina Alves", resultado: "Prazo de 14 dias úteis" },
       { data: "14/ago", evento: "Devolvido por Helena Prado", resultado: "No prazo" },
     ],
   },
@@ -105,7 +105,7 @@ export const equipamentos: Equipamento[] = [
     devolucao: "17/set",
     ultimaDevolucao: "31/jul",
     historico: [
-      { data: "03/set", evento: "Retirado por Bruno Kato", resultado: "Prazo de 14 dias" },
+      { data: "03/set", evento: "Retirado por Bruno Kato", resultado: "Prazo de 14 dias úteis" },
       { data: "31/jul", evento: "Devolvido por Marina Alves", resultado: "Atraso de 2 dias" },
     ],
   },

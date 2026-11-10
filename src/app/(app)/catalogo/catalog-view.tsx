@@ -41,7 +41,7 @@ export function CatalogView() {
           <div>
             <p className={ui.noticeTitle}>Regras de empréstimo</p>
             <p className={ui.noticeBody}>
-              Até 3 itens por pessoa, prazo de 14 dias. Quem tem item em atraso não solicita outro.
+              Até 3 itens por pessoa, prazo de 14 dias úteis. Quem tem item em atraso não solicita outro.
               Itens em manutenção ficam fora do catálogo.
             </p>
           </div>

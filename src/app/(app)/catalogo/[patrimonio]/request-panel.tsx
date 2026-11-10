@@ -32,7 +32,7 @@ export function RequestPanel({ nome, disponivel }: { nome: string; disponivel: b
       <section className={styles.panel} aria-labelledby="request-title">
         <h2 className={styles.panelTitle} id="request-title">Solicitar empréstimo</h2>
         <div className={styles.kv}><span>Retirada</span><span>04/set · Balcão de Operações</span></div>
-        <div className={styles.kv}><span>Prazo padrão</span><span>14 dias</span></div>
+        <div className={styles.kv}><span>Prazo padrão</span><span>14 dias úteis</span></div>
         <div className={styles.kv}><span>Devolver até</span><span className={styles.kvStrong}>18/set</span></div>
         <button
           ref={triggerRef}
@@ -61,7 +61,7 @@ export function RequestPanel({ nome, disponivel }: { nome: string; disponivel: b
         <div className={styles.backdrop} onClick={() => setOpen(false)}>
           <div className={styles.dialog} role="dialog" aria-modal="true" aria-labelledby="dialog-title" onClick={(event) => event.stopPropagation()}>
             <h2 id="dialog-title">Confirmar solicitação</h2>
-            <p className={styles.dialogBody}>{nome} · devolução até 18/set, 14 dias a partir de hoje.</p>
+            <p className={styles.dialogBody}>{nome} · devolução até 18/set, 14 dias úteis a partir de hoje.</p>
             <div className={styles.consequence}>Você chegará a 3 de 3 itens. Para solicitar outro, devolva um antes.</div>
             {confirmed ? (
               <p className={styles.feedback} role="status">Prévia: nenhuma solicitação foi registrada. O fluxo real ainda não está conectado.</p>

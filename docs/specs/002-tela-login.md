@@ -17,7 +17,7 @@ cobre somente a tela e suas interações locais; não simula acesso autenticado.
 ## Escopo
 
 - Página responsiva em modo escuro com marca EmpresTI, painel de apresentação
-  (3 itens por pessoa, 14 dias de prazo) e formulário, conforme a tela 01 do
+  (3 itens por pessoa, 14 dias úteis de prazo) e formulário, conforme a tela 01 do
   layout Nocturne.
 - Campos de e-mail e senha com rótulos visíveis, preenchimento automático
   adequado e controle de mostrar/ocultar senha.

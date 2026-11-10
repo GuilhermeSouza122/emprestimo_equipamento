@@ -18,7 +18,7 @@ enquanto autenticação, catálogo e empréstimo ainda não foram implementados.
 ## Critérios de aceitação
 
 - **CA-01:** `/` mostra nome, propósito e passos do empréstimo.
-- **CA-02:** a página apresenta limite de três itens, prazo de 14 dias,
+- **CA-02:** a página apresenta limite de três itens, prazo de 14 dias úteis,
   bloqueio por atraso e indisponibilidade de itens em manutenção.
 - **CA-03:** a área de estado reflete `/health`, inclusive em caso de falha,
   sem exibir equipamentos ou números fictícios.

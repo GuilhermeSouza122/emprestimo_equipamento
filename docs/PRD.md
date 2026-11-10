@@ -26,7 +26,9 @@ atualizar a linha.
 ## Regras que Operações já decidiu
 
 - Cada pessoa pode estar com no máximo 3 itens ao mesmo tempo.
-- O prazo padrão de devolução é de 14 dias.
+- O prazo padrão de devolução é de 14 dias úteis, contados a partir do dia do
+  empréstimo. Não contam sábados, domingos nem feriados (nacionais e do estado
+  e do município de São Paulo). Fuso horário: America/Sao_Paulo.
 - Quem tem item em atraso não pode pegar outro emprestado.
 - Equipamento em manutenção não aparece como disponível.
 

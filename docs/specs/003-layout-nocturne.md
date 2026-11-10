@@ -49,7 +49,7 @@ e header de 64 px.
   qualquer visitante nesta versão estática, e os dados são fictícios. Antes de
   conectar dados reais, proteger as rotas no servidor conforme
   `rules/restrictions.md`.
-- Regras de negócio (3 itens, 14 dias, bloqueio por atraso) aparecem na interface
+- Regras de negócio (3 itens, 14 dias úteis, bloqueio por atraso) aparecem na interface
   como informação; não são impostas por back-end.
 - Patrimônio inexistente em `/catalogo/[patrimonio]` retorna 404.
 - Reserva futura, e-mail e importação de planilha seguem fora de escopo (v1).
