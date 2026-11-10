@@ -180,6 +180,25 @@ de verdade numa sessão nova antes de entregar.**
 - **Falta:** uma segunda rodada do verificador sobre o código já corrigido, com a tabela final
   da Spec 004 (e da Spec 006 quando existir). Só o parecer APROVADA permite dar a spec como pronta.
 
+### Rodada do verificador de verdade: Specs 004 e 005 (sessão nova, 2026-11-10)
+O `verificador-specs` carregado numa sessão nova rodou sobre as Specs 004 e 005. Nenhum critério de
+comportamento foi reprovado. Resumo das tabelas devolvidas:
+
+| Spec | Aprovados | Pendentes | Parecer |
+|------|-----------|-----------|---------|
+| 004 | DADOS-02, 03, 04, 05, 06 e 09 | DADOS-01 (migrations do zero), DADOS-07 (URL pública em produção, manual do usuário), DADOS-08 | Reprovada por ambiente: `npm run build` falhou com EPERM |
+| 005 | AUTH-01 a AUTH-08 | AUTH-09 | Pendente: build, `npm audit` e migrations do zero |
+
+- **Causa do build:** `EPERM` em `.next` (rmdir). Era um `next dev` que eu mantinha ligado na outra sessão, travando a
+  pasta; não era erro de código. Com o servidor parado e `.next` removido, `npm run build` passa.
+- **DADOS-01 / migrations do zero:** o verificador não cria banco. Criei um teste que faz isso
+  (`src/server/migracoes.test.ts`, commit `fb19c6a`): banco descartável local, `migrate deploy`, tabelas e índices únicos conferidos,
+  banco removido no fim. Passou a fazer parte de `npm test` (69 testes).
+- **Achados do verificador sem ação:** o hash falso do login (AUTH-02) não tem teste de tempo de resposta;
+  o proxy só confere a presença do cookie, e a validação real fica nas páginas e nos procedimentos (como a spec descreve).
+- **Aberto:** decisão sobre `npm audit` (ver seção 8) e nova rodada do verificador, com o build já liberado, para trocar os
+  pareceres por APROVADA. A Spec 006 ainda não passou pelo verificador.
+
 ## 7. Uma regra sua que esta prática pôs à prova
 **`rules/spec-flow.md` não exigia nenhuma verificação independente.** Ela mandava implementar,
 testar e entregar; nada impedia o mesmo agente de implementar e declarar a spec pronta. A

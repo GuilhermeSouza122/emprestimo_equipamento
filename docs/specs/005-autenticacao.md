@@ -6,9 +6,12 @@ A decisão sobre os alertas do `npm audit` continua aberta.
 
 **Implementação (2026-11-10):** feita e verificada por `lint`, `tsc`, `npm test` e
 `npm run build`, mais um teste ponta a ponta local (curl e navegador) com usuários
-temporários, já removidos. **Verificação independente pendente:** o
-`verificador-specs` ainda não rodou sobre esta spec, então ela consta como
-"implementada, verificação pendente" (`rules/spec-flow.md`).
+temporários, já removidos. **Verificação independente:** o `verificador-specs` rodou numa
+sessão nova e aprovou AUTH-01 a AUTH-08, sem reprovar nenhum critério. O parecer ficou
+PENDENTE por `npm run build` (EPERM em `.next`, causado por um `next dev` aberto; já liberado),
+`npm audit` (decisão ainda aberta) e migrations do zero (agora coberto por
+`src/server/migracoes.test.ts`). Consta como "implementada, verificação pendente" até uma
+nova rodada dar APROVADA (`rules/spec-flow.md`).
 
 ## Objetivo e vínculo
 
