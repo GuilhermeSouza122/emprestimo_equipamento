@@ -3,6 +3,10 @@
 **Status:** aprovada pelo usuário em 2026-11-10, incluindo as decisões da tabela
 abaixo (TI-0010 em manutenção, senha por variável de ambiente, nome "Marcelo Grilo").
 
+**Verificação independente: APROVADA** (`verificador-specs`, rodada completa, sessão nova, 2026-11-10):
+DADOS-01 a DADOS-09 atendidos, `lint`, `npm test` (77 testes), `npm run build` e `git diff --check` OK. O
+DADOS-07 foi provado por `validar.mjs` e por `conferir-remoto.mjs` (12 de 12 URLs públicas, `sha256` idêntico).
+
 ## Objetivo e vínculo
 
 Fazer o sistema em produção ter equipamentos reais, com foto, e a conta do

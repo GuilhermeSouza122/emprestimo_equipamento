@@ -186,7 +186,7 @@ comportamento foi reprovado. Resumo das tabelas devolvidas:
 
 | Spec | Aprovados | Pendentes | Parecer |
 |------|-----------|-----------|---------|
-| 004 | DADOS-01 a 06, 08 (esta rodada) e 09 | DADOS-07 (URL pública em produção: parte manual; conferida por HTTP em 2026-11-10, ver Spec 004) | Pendente só pelo DADOS-07 |
+| 004 | DADOS-01 a DADOS-09 (todos) | nenhum | **APROVADA** (rodada completa, build OK, DADOS-07 por sha256) |
 | 005 | AUTH-01 a AUTH-09 | nenhum | **APROVADA** (segunda rodada, build OK) |
 | 006 | EMP-01 a EMP-14 (todos) | nenhum | **APROVADA** (rodada posterior, com o build já liberado) |
 
@@ -219,8 +219,12 @@ comportamento foi reprovado. Resumo das tabelas devolvidas:
   ele apontou que o tamanho é prova fraca). Reforcei com `conferir-remoto.mjs`: `sha256` das 12 idênticas.
   Como essa rodada olhou só o DADOS-07 e o build dele passou de 120 s (o OneDrive deixa o build lento), a
   Spec 004 inteira ainda não tem um parecer APROVADA único.
-- **Aberto:** uma última rodada completa do verificador na Spec 004, esperando o build terminar; e o que
-  depende do usuário (push, migrations e seed no deploy, variáveis na Vercel).
+- **Spec 004 APROVADA** na rodada completa (DADOS-01 a DADOS-09; 77 testes; build OK). **As três specs (004, 005 e
+  006) têm parecer APROVADA do `verificador-specs`.** Observação dele: o aviso `ENOTEMPTY` ao limpar `.next`
+  (OneDrive) não afetou o build, e uma segunda execução simultânea do build falha com "Another next build
+  process is already running" (não rodar `lint` e `build` ao mesmo tempo).
+- **Aberto, só o que depende do usuário:** push, migrations e seed no deploy, variáveis na Vercel, tag
+  `entrega-pratica` e a conferência final em produção (seção 7 do enunciado).
 
 ## 7. Uma regra sua que esta prática pôs à prova
 **`rules/spec-flow.md` não exigia nenhuma verificação independente.** Ela mandava implementar,
@@ -239,8 +243,9 @@ Outros pontos que a prática expôs, sem mudar a rule ainda:
 
 ## 8. O que ficou de fora e o que faria diferente
 **Ficou de fora:**
-- **Specs 005 e 006 implementadas, mas sem verificação independente.** Falta rodar o `verificador-specs`
-  (só carrega em sessão nova) sobre as Specs 004, 005 e 006 e anexar as tabelas finais à seção 6.
+- **Specs 004, 005 e 006 com parecer APROVADA** do verificador. Fica de fora o que só o usuário faz em
+  produção (ver abaixo) e um teste de navegador automatizado (a interface foi conferida à mão e por leitura
+  de código).
 - **Sem devolução.** Um item emprestado continua assim, então o estoque de teste é consumido (9 itens
   disponíveis); liberar itens em produção é ação do usuário no banco. Operações segue com dados de exemplo.
 - Rodar o seed no banco do deploy e enviar as imagens ao Supabase: ações do usuário, fora do agente.
