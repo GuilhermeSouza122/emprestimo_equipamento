@@ -71,6 +71,8 @@ Ao trabalhar neste projeto:
 1. Registre o estado inicial do Git e examine os arquivos relacionados ao pedido.
 2. Siga `rules/spec-flow.md` para definir e executar o escopo aprovado.
 3. Use `rules/checks.md` para verificar e `rules/handoff.md` para entregar.
+4. Não declare nenhuma spec pronta sem uma rodada do subagente `verificador-specs`
+   (`.claude/agents/verificador-specs.md`), conforme `rules/spec-flow.md`.
 
 <!-- BEGIN:nextjs-agent-rules -->
 

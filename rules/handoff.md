@@ -19,6 +19,9 @@ pessoa ou agente.
 - Confirmação de compatibilidade com o ADR-001 quando a tarefa tocar em
   framework, API, autenticação, banco, migrations ou testes.
 - Comandos de verificação executados e seus resultados.
+- Tabela da última rodada do `verificador-specs` para cada spec implementada, com o
+  parecer. Sem parecer APROVADA, a spec consta como "implementada, verificação
+  pendente" (`rules/spec-flow.md`).
 - Limitações, falhas ou dependências externas que ainda bloqueiam algo.
 - Próximo passo concreto, quando houver trabalho pendente.
 
