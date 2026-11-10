@@ -1,0 +1,72 @@
+[
+  {
+    "id": 7188564,
+    "patrimonio": "TI-0001",
+    "motivo": "xícara de café, não mostra notebook"
+  },
+  {
+    "id": 2982270,
+    "patrimonio": "TI-0001",
+    "motivo": "câmera e celular na cena, mistura equipamentos"
+  },
+  {
+    "id": 2511065,
+    "patrimonio": "TI-0002",
+    "motivo": "livro e óculos, sem notebook"
+  },
+  {
+    "id": 886462,
+    "patrimonio": "TI-0003",
+    "motivo": "logo do Windows legível na tecla"
+  },
+  {
+    "id": 4906312,
+    "patrimonio": "TI-0004",
+    "motivo": "pessoa na foto"
+  },
+  {
+    "id": 1846056,
+    "patrimonio": "TI-0004",
+    "motivo": "não corresponde ao pedido de notebook fechado e enquadramento ruim no recorte"
+  },
+  {
+    "id": 4795762,
+    "patrimonio": "TI-0005",
+    "motivo": "tela com código legível e marca visível"
+  },
+  {
+    "id": 820277,
+    "patrimonio": "TI-0006",
+    "motivo": "logo da Apple legível"
+  },
+  {
+    "id": 405768,
+    "patrimonio": "TI-0006",
+    "motivo": "logo Dell legível"
+  },
+  {
+    "id": 6801334,
+    "patrimonio": "TI-0007",
+    "motivo": "celular sobre notebook, não é monitor"
+  },
+  {
+    "id": 1155173,
+    "patrimonio": "TI-0007",
+    "motivo": "logo Lenovo legível"
+  },
+  {
+    "id": 541213,
+    "patrimonio": "TI-0012",
+    "motivo": "logo Olympus legível"
+  },
+  {
+    "id": 7693094,
+    "patrimonio": "TI-0012",
+    "motivo": "marca Rollei legível"
+  },
+  {
+    "id": 5028354,
+    "patrimonio": "TI-0012",
+    "motivo": "marca Kodak legível"
+  }
+]
