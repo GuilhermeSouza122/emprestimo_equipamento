@@ -3,13 +3,15 @@
 **Status:** aprovada pelo usuário em 2026-11-10, com as decisões da tabela abaixo,
 a conta de teste no seed e os feriados confirmados.
 
-**Implementação (2026-11-10):** feita e verificada por `lint`, `tsc`, `npm test` (68 testes,
+**Implementação (2026-11-10):** feita e verificada por `lint`, `tsc`, `npm test` (69 testes,
 repetido 3 vezes para estabilidade das provas de concorrência), `npm run build`, as 4
 migrations em banco vazio e um teste no navegador com a conta de teste (login, catálogo com
 as 12 fotos do Supabase, solicitar 3 itens, recusa por limite, manutenção, "Meus
-empréstimos" e Sair), com o banco local restaurado depois. **Verificação independente
-pendente:** o `verificador-specs` ainda não rodou sobre esta spec; ela consta como
-"implementada, verificação pendente" (`rules/spec-flow.md`).
+empréstimos" e Sair), com o banco local restaurado depois. **Verificação independente: APROVADA** (`verificador-specs` em sessão nova, 2026-11-10): os 14 critérios
+EMP-01 a EMP-14 têm evidência de código e de testes que o verificador viu; `lint`, `npm test` (69 testes, já
+contando o teste de migrations do zero), `npm run build` e `git diff --check` passaram. Ressalvas dele:
+a interface (foco, fallback da imagem, botão desabilitado) foi conferida só por leitura de código, e o
+`npm audit` ficou como decisão de risco aceito (ver `ENTREGA.md`, seção 8).
 
 ## Objetivo e vínculo
 

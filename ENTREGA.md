@@ -188,6 +188,7 @@ comportamento foi reprovado. Resumo das tabelas devolvidas:
 |------|-----------|-----------|---------|
 | 004 | DADOS-02, 03, 04, 05, 06 e 09 | DADOS-01 (migrations do zero), DADOS-07 (URL pública em produção, manual do usuário), DADOS-08 | Reprovada por ambiente: `npm run build` falhou com EPERM |
 | 005 | AUTH-01 a AUTH-08 | AUTH-09 | Pendente: build, `npm audit` e migrations do zero |
+| 006 | EMP-01 a EMP-14 (todos) | nenhum | **APROVADA** (rodada posterior, com o build já liberado) |
 
 - **Causa do build:** `EPERM` em `.next` (rmdir). Era um `next dev` que eu mantinha ligado na outra sessão, travando a
   pasta; não era erro de código. Com o servidor parado e `.next` removido, `npm run build` passa.
@@ -196,8 +197,11 @@ comportamento foi reprovado. Resumo das tabelas devolvidas:
   banco removido no fim. Passou a fazer parte de `npm test` (69 testes).
 - **Achados do verificador sem ação:** o hash falso do login (AUTH-02) não tem teste de tempo de resposta;
   o proxy só confere a presença do cookie, e a validação real fica nas páginas e nos procedimentos (como a spec descreve).
-- **Aberto:** decisão sobre `npm audit` (ver seção 8) e nova rodada do verificador, com o build já liberado, para trocar os
-  pareceres por APROVADA. A Spec 006 ainda não passou pelo verificador.
+- **Spec 006: APROVADA** pelo verificador (14 de 14, `npm run build` OK, 69 testes). Ressalvas dele: interface
+  conferida só por leitura de código e `npm audit` decidido como risco aceito (seção 8).
+- **Aberto:** os relatórios das Specs 004 e 005 são da rodada anterior (build com EPERM, antes do teste de
+  migrations do zero). Falta uma nova rodada do verificador sobre as duas, sem `next dev` aberto, para os
+  pareceres virarem APROVADA. DADOS-07 (URL pública em produção) e o seed no deploy dependem do usuário.
 
 ## 7. Uma regra sua que esta prática pôs à prova
 **`rules/spec-flow.md` não exigia nenhuma verificação independente.** Ela mandava implementar,
