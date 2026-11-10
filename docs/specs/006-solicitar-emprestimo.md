@@ -71,7 +71,7 @@ item (não é mostrado a outros usuários) e limite de tentativas.
 |---|---|---|
 | Limite de itens | 3 em aberto | PRD, homepage e specs 001 a 003; o briefing dizia 5 e já foi decidido contra (ENTREGA.md) |
 | Dia 0 do prazo | O dia do empréstimo não conta; o 1º dia útil é o seguinte | O PRD diz "a partir do dia do empréstimo" e não fala se ele entra; assim um pedido no sábado ou em feriado funciona sem regra extra |
-| Feriados | Sábados, domingos e feriados nacionais (incluindo Sexta-feira Santa, 20/11), estadual de SP (09/07) e municipais de São Paulo (25/01 e Corpus Christi); **não** Carnaval, que é ponto facultativo | Segue o PRD ("nacionais, do estado e do município de SP"); os móveis são calculados pela Páscoa. Corpus Christi como feriado municipal precisa da sua confirmação |
+| Feriados | Sábados, domingos e feriados nacionais (incluindo Sexta-feira Santa, 20/11), estadual de SP (09/07) e municipais de São Paulo (25/01 e Corpus Christi); **não** Carnaval, que é ponto facultativo | Segue o PRD ("nacionais, do estado e do município de SP"); os móveis são calculados pela Páscoa. Corpus Christi como feriado municipal foi confirmado pelo usuário |
 | Fuso e datas | Dia civil em `America/Sao_Paulo`; devolução prevista guardada como data (`DATE`), sem hora | Evita empréstimo "virar o dia" em UTC |
 | O que é atraso | Devolução prevista **anterior a hoje** e empréstimo em aberto; vence hoje ainda não é atraso | O PRD diz "em atraso", e prazo até o fim do dia é o uso comum |
 | Quem pode solicitar | Qualquer usuário autenticado, `colaborador` ou `operacoes` | O PRD só diz que o colaborador pede; quem trabalha em Operações também é funcionário. Se preferir só `colaborador`, é uma linha |
@@ -137,12 +137,11 @@ item (não é mostrado a outros usuários) e limite de tentativas.
 
 ## Pendências que dependem de decisão
 
-1. **Conta de teste.** O enunciado manda testar com outra conta, mas só existe a do
-   professor e não há cadastro. Recomendação: o seed (Spec 004) passa a criar, de forma
-   opcional, uma segunda conta de colaborador a partir de variáveis de ambiente
-   (e-mail e senha), nunca no código. É uma alteração pequena na Spec 004 e precisa da
-   sua aprovação.
-2. **Feriados.** Confirmar Corpus Christi como feriado municipal e a exclusão do Carnaval.
+1. ~~**Conta de teste.**~~ **Resolvida em 2026-11-10:** o seed (Spec 004, critério
+   DADOS-09) cria, de forma opcional, uma conta de colaborador a partir de
+   `SEED_TESTE_EMAIL` e `SEED_TESTE_PASSWORD`. Nada no código.
+2. ~~**Feriados.**~~ **Confirmado pelo usuário em 2026-11-10:** Corpus Christi vale como
+   feriado municipal de São Paulo e o Carnaval não entra.
 3. **Imagens no Supabase.** Enquanto o usuário não enviar as 12 imagens e definir
    `EQUIPAMENTOS_IMAGENS_BASE_URL`, o catálogo mostra o ícone da categoria.
 4. **Estoque de teste.** São 9 itens disponíveis e ninguém devolve nada ainda: três

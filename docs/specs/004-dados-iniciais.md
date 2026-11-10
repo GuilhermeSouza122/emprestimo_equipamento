@@ -37,6 +37,12 @@ Hoje o schema só tem `SystemStatus`: não existem usuários nem equipamentos.
   `src/server/auth/senha.mjs`, com `senha.d.mts`, porque o seed é JavaScript e o
   `tsconfig.json` tem `allowJs: false`; a Spec 005 reutiliza o mesmo módulo.
 - Se o usuário já existe, o seed não altera nome, papel nem senha.
+- **Conta de teste opcional** (emenda de 2026-11-10, pedida pelo usuário na Spec 006):
+  se `SEED_TESTE_EMAIL` e `SEED_TESTE_PASSWORD` estiverem definidas (as duas juntas, ou
+  nenhuma), o seed cria também um colaborador com esse e-mail e senha, para testar sem
+  usar a conta do professor, que precisa chegar à correção com zero empréstimos. Mesmas
+  regras da conta do professor: valores só do ambiente, hash `scrypt`, idempotente, e
+  uma conta existente não é alterada. Não pode ser o e-mail do professor.
 
 ## Fora de escopo
 
@@ -76,6 +82,10 @@ usuário de Operações, envio de imagens ao Supabase (feito pelo usuário).
   imagem abre sem login (conferência manual do usuário).
 - **DADOS-08:** a spec passa pelo subagente `verificador-specs` antes de ser dada
   como pronta.
+- **DADOS-09:** com `SEED_TESTE_EMAIL` e `SEED_TESTE_PASSWORD`, o seed cria uma conta de
+  colaborador com hash `scrypt` (nunca a senha em texto), sem tocar na do professor;
+  repetir não duplica nem troca a senha; e-mail inválido, senha vazia ou o e-mail do
+  professor abortam antes de qualquer gravação.
 
 ## Casos de erro e limites
 

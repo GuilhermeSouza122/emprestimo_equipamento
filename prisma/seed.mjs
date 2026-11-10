@@ -22,15 +22,24 @@ try {
   const destino = validarDestino(process.env.DATABASE_URL, { producao });
   console.log(`Destino: ${destino}${producao ? " (--producao informado)" : ""}`);
 
+  // Conta de teste opcional: as duas variáveis juntas ou nenhuma.
+  const emailTeste = process.env.SEED_TESTE_EMAIL?.trim();
+  const senhaTeste = process.env.SEED_TESTE_PASSWORD;
+  if (Boolean(emailTeste) !== Boolean(senhaTeste?.trim())) {
+    throw new Error("Defina SEED_TESTE_EMAIL e SEED_TESTE_PASSWORD juntas, ou nenhuma das duas.");
+  }
+
   prisma = new PrismaClient();
   const resultado = await executarSeed(prisma, {
     equipamentos: lerEquipamentos(path.join(raiz, "data", "equipamentos.json")),
     senha: process.env.SEED_PROFESSOR_PASSWORD,
     existeImagem: (arquivo) => existsSync(path.join(raiz, "data", "imagens", arquivo)),
+    contaTeste: emailTeste ? { email: emailTeste, senha: senhaTeste } : undefined,
   });
 
   console.log(`Equipamentos: ${resultado.equipamentos} (${resultado.equipamentosCriados} novos).`);
   console.log(`Usuário ${PROFESSOR.email}: ${resultado.usuarioCriado ? "criado" : "já existia, mantido"}.`);
+  if (emailTeste) console.log(`Conta de teste ${emailTeste}: ${resultado.contaTesteCriada ? "criada" : "já existia, mantida"}.`);
 } catch (erro) {
   // Erros do Prisma podem citar host, usuário ou trechos da URL: mostre só o tipo e o código.
   const doPrisma = typeof erro?.name === "string" && erro.name.startsWith("PrismaClient");

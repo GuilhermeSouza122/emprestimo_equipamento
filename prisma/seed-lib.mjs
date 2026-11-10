@@ -72,7 +72,21 @@ export function validarDestino(databaseUrl, { producao = false } = {}) {
   return descricao;
 }
 
-export async function executarSeed(prisma, { equipamentos, senha, existeImagem, usuario = PROFESSOR }) {
+const EMAIL_VALIDO = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// Conta de teste opcional (Spec 004), para testar sem usar a conta do professor, que precisa
+// chegar à correção com zero empréstimos. E-mail e senha vêm do ambiente, nunca do código.
+function validarContaTeste(contaTeste, emailDoProfessor) {
+  const email = String(contaTeste.email ?? "").trim().toLowerCase();
+  if (!EMAIL_VALIDO.test(email)) throw new Error("SEED_TESTE_EMAIL inválido.");
+  if (email === emailDoProfessor) throw new Error("A conta de teste não pode ser a do professor.");
+  if (typeof contaTeste.senha !== "string" || contaTeste.senha.trim() === "") {
+    throw new Error("SEED_TESTE_PASSWORD ausente ou vazia.");
+  }
+  return { email, nome: contaTeste.nome?.trim() || "Conta de Teste", papel: "colaborador", senha: contaTeste.senha };
+}
+
+export async function executarSeed(prisma, { equipamentos, senha, existeImagem, usuario = PROFESSOR, contaTeste }) {
   // Tudo é validado antes da primeira gravação.
   if (typeof senha !== "string" || senha.trim() === "") {
     throw new Error("SEED_PROFESSOR_PASSWORD ausente ou vazia: defina a variável de ambiente.");
@@ -82,6 +96,11 @@ export async function executarSeed(prisma, { equipamentos, senha, existeImagem, 
   // Usuário existente não é alterado (nem o hash), para o seed ser idempotente.
   const existente = await prisma.usuario.findUnique({ where: { email: usuario.email } });
   const senhaHash = existente ? null : await hashSenha(senha);
+
+  // A conta de teste também é validada antes de qualquer gravação e, se já existe, não é alterada.
+  const teste = contaTeste ? validarContaTeste(contaTeste, usuario.email) : null;
+  const testeExistente = teste ? await prisma.usuario.findUnique({ where: { email: teste.email } }) : null;
+  const testeHash = teste && !testeExistente ? await hashSenha(teste.senha) : null;
 
   return prisma.$transaction(async (tx) => {
     let criados = 0;
@@ -99,6 +118,14 @@ export async function executarSeed(prisma, { equipamentos, senha, existeImagem, 
       }
     }
     if (senhaHash) await tx.usuario.create({ data: { ...usuario, senhaHash } });
-    return { equipamentos: lista.length, equipamentosCriados: criados, usuarioCriado: Boolean(senhaHash) };
+    if (teste && testeHash) {
+      await tx.usuario.create({ data: { email: teste.email, nome: teste.nome, papel: teste.papel, senhaHash: testeHash } });
+    }
+    return {
+      equipamentos: lista.length,
+      equipamentosCriados: criados,
+      usuarioCriado: Boolean(senhaHash),
+      contaTesteCriada: Boolean(testeHash),
+    };
   });
 }

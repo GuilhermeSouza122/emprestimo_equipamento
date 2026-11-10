@@ -18,7 +18,10 @@ export type ResultadoSeed = {
   equipamentos: number;
   equipamentosCriados: number;
   usuarioCriado: boolean;
+  contaTesteCriada: boolean;
 };
+
+export type ContaTesteSeed = { email: string; senha: string | undefined; nome?: string };
 
 export const CATEGORIAS: readonly string[];
 export const SITUACOES: readonly string[];
@@ -40,5 +43,6 @@ export function executarSeed(
     senha: string | undefined;
     existeImagem: (arquivo: string) => boolean;
     usuario?: UsuarioSeed;
+    contaTeste?: ContaTesteSeed;
   },
 ): Promise<ResultadoSeed>;

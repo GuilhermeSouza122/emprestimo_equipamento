@@ -90,6 +90,7 @@ describe("seed: destino do banco", () => {
 
 describe("seed: gravacao no banco (PostgreSQL local)", () => {
   const usuarioTeste = { email: "seed-teste@example.invalid", nome: "Usuario de Teste", papel: "colaborador" as const };
+  const contaExtra = { email: "seed-conta-extra@example.invalid", senha: "senha-da-conta-extra" };
   const lista = [
     { patrimonio: "TST-0001", nome: "Notebook de teste", categoria: "notebook", situacao: "disponivel", busca: "ignorada" },
     { patrimonio: "TST-0002", nome: "Monitor de teste", categoria: "monitor", situacao: "manutencao" },
@@ -104,7 +105,7 @@ describe("seed: gravacao no banco (PostgreSQL local)", () => {
 
   const limpar = async () => {
     await db.equipamento.deleteMany({ where: { patrimonio: { startsWith: "TST-" } } });
-    await db.usuario.deleteMany({ where: { email: usuarioTeste.email } });
+    await db.usuario.deleteMany({ where: { email: { in: [usuarioTeste.email, contaExtra.email] } } });
   };
 
   beforeEach(limpar);
@@ -116,7 +117,7 @@ describe("seed: gravacao no banco (PostgreSQL local)", () => {
   it("DADOS-02/03: cria os equipamentos e um colaborador com hash scrypt, nunca a senha", async () => {
     const resultado = await executarSeed(db, opcoes());
 
-    expect(resultado).toEqual({ equipamentos: 2, equipamentosCriados: 2, usuarioCriado: true });
+    expect(resultado).toEqual({ equipamentos: 2, equipamentosCriados: 2, usuarioCriado: true, contaTesteCriada: false });
     const equipamentos = await db.equipamento.findMany({ where: { patrimonio: { startsWith: "TST-" } }, orderBy: { patrimonio: "asc" } });
     expect(equipamentos.map((e) => [e.patrimonio, e.categoria, e.situacao, e.imagemArquivo])).toEqual([
       ["TST-0001", "notebook", "disponivel", "TST-0001.jpg"],
@@ -141,7 +142,7 @@ describe("seed: gravacao no banco (PostgreSQL local)", () => {
     const segundo = await executarSeed(db, opcoes());
     await executarSeed(db, opcoes());
 
-    expect(segundo).toEqual({ equipamentos: 2, equipamentosCriados: 0, usuarioCriado: false });
+    expect(segundo).toEqual({ equipamentos: 2, equipamentosCriados: 0, usuarioCriado: false, contaTesteCriada: false });
     expect(await db.equipamento.count({ where: { patrimonio: { startsWith: "TST-" } } })).toBe(2);
     expect(await db.usuario.count({ where: { email: usuarioTeste.email } })).toBe(1);
     const depois = await db.usuario.findUniqueOrThrow({ where: { email: usuarioTeste.email } });
@@ -180,6 +181,44 @@ describe("seed: gravacao no banco (PostgreSQL local)", () => {
     await expect(executarSeed(db, opcoes({ existeImagem: () => false }))).rejects.toThrow(/imagem/i);
     expect(await db.equipamento.count({ where: { patrimonio: { startsWith: "TST-" } } })).toBe(0);
     expect(await db.usuario.count({ where: { email: usuarioTeste.email } })).toBe(0);
+  });
+
+  it("DADOS-09: a conta de teste opcional e criada como colaborador, com hash e sem tocar no professor", async () => {
+    const resultado = await executarSeed(db, opcoes({ contaTeste: { ...contaExtra, email: ` ${contaExtra.email.toUpperCase()} ` } }));
+
+    expect(resultado.contaTesteCriada).toBe(true);
+    const conta = await db.usuario.findUniqueOrThrow({ where: { email: contaExtra.email } });
+    expect(conta.papel).toBe("colaborador");
+    expect(conta.senhaHash.startsWith("scrypt$")).toBe(true);
+    expect(conta.senhaHash).not.toContain(contaExtra.senha);
+    expect(await db.usuario.count({ where: { email: usuarioTeste.email } })).toBe(1);
+  });
+
+  it("DADOS-09: repetir o seed nao duplica nem troca a senha da conta de teste", async () => {
+    await executarSeed(db, opcoes({ contaTeste: contaExtra }));
+    const antes = await db.usuario.findUniqueOrThrow({ where: { email: contaExtra.email } });
+
+    const segundo = await executarSeed(db, opcoes({ contaTeste: { ...contaExtra, senha: "outra-senha-qualquer" } }));
+
+    expect(segundo.contaTesteCriada).toBe(false);
+    expect(await db.usuario.count({ where: { email: contaExtra.email } })).toBe(1);
+    expect((await db.usuario.findUniqueOrThrow({ where: { email: contaExtra.email } })).senhaHash).toBe(antes.senhaHash);
+  });
+
+  it("DADOS-09: conta de teste invalida aborta antes de gravar qualquer dado", async () => {
+    const invalidas = [
+      { email: "nao-e-email", senha: "x" },
+      { email: contaExtra.email, senha: "" },
+      { email: usuarioTeste.email, senha: "x" }, // e o mesmo e-mail do usuario principal do teste
+    ];
+    for (const contaTeste of invalidas.slice(0, 2)) {
+      await expect(executarSeed(db, opcoes({ contaTeste }))).rejects.toThrow();
+    }
+    await expect(
+      executarSeed(db, opcoes({ usuario: { ...usuarioTeste }, contaTeste: invalidas[2] })),
+    ).rejects.toThrow(/professor/);
+    expect(await db.equipamento.count({ where: { patrimonio: { startsWith: "TST-" } } })).toBe(0);
+    expect(await db.usuario.count({ where: { email: { in: [usuarioTeste.email, contaExtra.email] } } })).toBe(0);
   });
 
   it("o usuario padrao do seed e o professor, colaborador", () => {
