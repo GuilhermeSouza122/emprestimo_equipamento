@@ -7,6 +7,86 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Papel {
+  colaborador
+  operacoes
+
+  @@map("papel")
+}
+
+enum CategoriaEquipamento {
+  notebook
+  monitor
+  cabo
+  camera
+
+  @@map("categoria_equipamento")
+}
+
+enum SituacaoEquipamento {
+  disponivel
+  manutencao
+  emprestado
+
+  @@map("situacao_equipamento")
+}
+
+model Usuario {
+  id          Int          @id @default(autoincrement())
+  email       String       @unique
+  nome        String
+  papel       Papel
+  senhaHash   String       @map("senha_hash")
+  createdAt   DateTime     @default(now()) @map("created_at")
+  sessoes     Sessao[]
+  emprestimos Emprestimo[]
+
+  @@map("usuarios")
+}
+
+model Sessao {
+  id         Int       @id @default(autoincrement())
+  tokenHash  String    @unique @map("token_hash")
+  usuarioId  Int       @map("usuario_id")
+  usuario    Usuario   @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  createdAt  DateTime  @default(now()) @map("created_at")
+  expiraEm   DateTime  @map("expira_em")
+  revogadaEm DateTime? @map("revogada_em")
+
+  @@index([usuarioId])
+  @@map("sessoes")
+}
+
+model Equipamento {
+  id            Int                  @id @default(autoincrement())
+  patrimonio    String               @unique
+  nome          String
+  categoria     CategoriaEquipamento
+  situacao      SituacaoEquipamento
+  imagemArquivo String               @map("imagem_arquivo")
+  createdAt     DateTime             @default(now()) @map("created_at")
+  updatedAt     DateTime             @updatedAt @map("updated_at")
+  emprestimos   Emprestimo[]
+
+  @@map("equipamentos")
+}
+
+// Empréstimo em aberto = devolvidoEm nulo. A devolução ainda não existe (fora da Spec 006).
+model Emprestimo {
+  id                  Int         @id @default(autoincrement())
+  usuarioId           Int         @map("usuario_id")
+  usuario             Usuario     @relation(fields: [usuarioId], references: [id])
+  equipamentoId       Int         @map("equipamento_id")
+  equipamento         Equipamento @relation(fields: [equipamentoId], references: [id])
+  solicitadoEm        DateTime    @map("solicitado_em")
+  devolucaoPrevistaEm DateTime    @map("devolucao_prevista_em") @db.Date
+  devolvidoEm         DateTime?   @map("devolvido_em")
+
+  @@index([usuarioId, devolvidoEm])
+  @@index([equipamentoId, devolvidoEm])
+  @@map("emprestimos")
+}
+
 model SystemStatus {
   id        Int      @id @default(1)
   createdAt DateTime @default(now()) @map("created_at")

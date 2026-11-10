@@ -1,0 +1,68 @@
+/* Tokens do layout Nocturne (EmpresTI). Escopados em .nocturne para não afetar a homepage. */
+.nocturne {
+  --page: #05070f;
+  --color-bg: #080c1a;
+  --sidebar-bg: #060a16;
+  --color-surface: #0e1530;
+  --surface-sunken: #0b1128;
+  --color-text: #e6eaf6;
+  --text-muted: #8a93b2;
+  --text-dim: #7c86a2;
+  --text-faint: #5e6884;
+  --text-ghost: #454e68;
+
+  --border-frame: #222c4a;
+  --border-card: #1f2949;
+  --border-soft: #1a2340;
+  --border-row: #161d33;
+  --border-strong: #2b3450;
+
+  --accent-100: #eef2fe;
+  --accent-200: #d6e0fb;
+  --accent-300: #b4c6f6;
+  --accent-400: #8aa6ee;
+  --accent-500: #5b7fe0;
+  --accent-600: #3c5dbe;
+  --accent-700: #25408f;
+  --accent-800: #132663;
+  --accent-900: #001449;
+
+  --ok-text: #5fd3aa;
+  --ok-bg: rgba(63, 185, 140, 0.12);
+  --ok-border: rgba(63, 185, 140, 0.35);
+  --loan-text: #9aa3bc;
+  --loan-bg: #1a2340;
+  --loan-border: #2b3450;
+  --warn-text: #e8b961;
+  --warn-bg: rgba(224, 163, 63, 0.12);
+  --warn-border: rgba(224, 163, 63, 0.35);
+  --late-text: #f0a0a5;
+  --late-label: #e08a90;
+  --late-bg: rgba(224, 91, 98, 0.05);
+  --late-border: rgba(224, 91, 98, 0.4);
+
+  --shadow-lg: 0 0 0 1px #454e68, 0 18px 44px rgba(0, 0, 0, 0.7);
+
+  min-height: 100vh;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-open-sans), system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.45;
+  color-scheme: dark;
+}
+
+.nocturne * { box-sizing: border-box; }
+:where(.nocturne) :where(h1, h2, h3, p) { margin: 0; }
+:where(.nocturne) :where(h1, h2, h3) { font-weight: 600; letter-spacing: -0.01em; }
+:where(.nocturne) :where(button, input, select, textarea) { font-family: inherit; }
+.nocturne :focus-visible { outline: 2px solid var(--accent-500); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .nocturne *, .nocturne *::before, .nocturne *::after {
+    transition: none !important;
+    animation: none !important;
+    transform: none !important;
+  }
+}
+.nocturne-icon { flex: 0 0 auto; }

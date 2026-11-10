@@ -6,18 +6,41 @@ Sistema interno descrito em [PRD](docs/PRD.md). A stack aprovada está no
 
 ## Estado implementado
 
-- Homepage informativa e responsiva conforme [Spec 001](docs/specs/001-homepage.md).
-- Interface de login em `/login`, acessível pelo botão "Entrar" da homepage,
-  conforme [Spec 002](docs/specs/002-tela-login.md). Tem validação local e controle
-  de visibilidade da senha, mas não envia credenciais nem autentica usuários.
+- Homepage informativa e responsiva conforme [Spec 001](docs/specs/001-homepage.md),
+  no visual Nocturne/EmpresTI.
+- Login real em `/login`, acessível pelo botão "Entrar" da homepage
+  ([Spec 002](docs/specs/002-tela-login.md) para a interface e
+  [Spec 005](docs/specs/005-autenticacao.md) para a autenticação): e-mail e senha,
+  sessão de 8 horas guardada no PostgreSQL e cookie `HttpOnly`, via tRPC em `/api/trpc`
+  (`auth.entrar`, `auth.eu`, `auth.sair`). `/catalogo`, `/meus-emprestimos` e
+  `/operacoes/*` exigem sessão; `/operacoes/*` exige o papel `operacoes`, sempre
+  verificado no servidor. Exige `SESSION_SECRET` (em produção, pelo menos 32
+  caracteres, no painel da Vercel). Não há limite de tentativas de login.
+- Telas do layout Nocturne/EmpresTI conforme [Spec 003](docs/specs/003-layout-nocturne.md):
+  catálogo, detalhe do item, meus empréstimos, empréstimos em aberto e cadastro de
+  equipamento, em modo escuro. Os dados são de exemplo: não leem nem gravam no
+  banco. Exigem login, e as de Operações exigem o papel de Operações. O login
+  (`/login`) usa o mesmo visual.
 - Endpoint operacional `GET /health`, consultado pela homepage, e integração
   com PostgreSQL via Prisma.
 - Migration inicial e teste de integração do endpoint de saúde com Vitest.
+- Modelos `Usuario` e `Equipamento` com migration e seed idempotente
+  ([Spec 004](docs/specs/004-dados-iniciais.md), [ADR-003](docs/adr/003-imagens-equipamentos.md)).
+  As 12 imagens (800×600) preparadas pela skill `imagens-equipamentos` estão em
+  `data/imagens/`; o catálogo ainda não as exibe e o envio ao Supabase é manual.
 - Aplicação e banco configurados para Docker Compose.
 
-Autenticação real, sessões, procedimentos tRPC, catálogo e fluxos reais de empréstimo,
-devolução e Operações ainda não estão implementados. Aprovação da stack não
-significa que esses fluxos já funcionam.
+- Catálogo real e solicitação de empréstimo ([Spec 006](docs/specs/006-solicitar-emprestimo.md)):
+  `/catalogo` e `/catalogo/[patrimonio]` leem os equipamentos do banco, com a foto
+  (`EQUIPAMENTOS_IMAGENS_BASE_URL`, no Supabase Storage) e a situação de cada um;
+  solicitar cria o empréstimo na hora, só para item disponível, com devolução em 14 dias
+  úteis (calendário de São Paulo), limite de 3 itens, bloqueio por atraso e proteção
+  contra pedidos simultâneos. `/meus-emprestimos` lista os empréstimos em aberto do
+  usuário. Não há como devolver ainda: um item emprestado continua assim.
+
+A devolução e as telas de Operações com dados do banco ainda não estão implementadas
+(as telas de Operações mostram dados de exemplo). Aprovação da stack não significa que
+esses fluxos já funcionam.
 
 ## Preparar o ambiente
 
@@ -68,6 +91,14 @@ subir o serviço `db`. `npm install` gera o Prisma Client automaticamente.
 | `npm run db:generate` | Gera Prisma Client a partir do schema |
 | `npm run db:migrate` | Cria/aplica migrations de desenvolvimento; pode solicitar reset em caso de divergência |
 | `npm run db:deploy` | Aplica migrations existentes, sem gerar novas |
+| `npm run db:seed` | Grava os 12 equipamentos e a conta do professor ([Spec 004](docs/specs/004-dados-iniciais.md)); só aceita banco local, salvo `--producao` |
+
+O seed lê a senha da conta do professor de `SEED_PROFESSOR_PASSWORD`, definida no
+ambiente ao rodar o comando (nunca no código nem no git). É idempotente: repetir
+não duplica nada, não troca a senha de quem já existe e não altera a situação de
+equipamentos já cadastrados. Gravar no banco do deploy (`--producao`) e enviar as
+imagens ao Supabase é ação do usuário; os passos das imagens estão em
+`.claude/skills/imagens-equipamentos/references/envio-producao.md`.
 
 Não confirme um reset solicitado pelo Prisma sem autorização sobre o banco alvo.
 

@@ -1,110 +1,177 @@
 import Link from "next/link";
 
-import { Brand } from "./_components/brand";
 import { HealthStatus } from "./_components/health-status";
+import { Icon } from "./_components/nocturne/icons";
+import type { IconName } from "./_components/nocturne/icons";
+import { NocturneRoot } from "./_components/nocturne/root";
+import ui from "./_components/nocturne/ui.module.css";
+import styles from "./home.module.css";
 
-const steps = [
-  { number: "01", symbol: "⌕", title: "Encontre o que precisa", description: "Consulte o catálogo para saber quais equipamentos estão disponíveis." },
-  { number: "02", symbol: "+", title: "Solicite o empréstimo", description: "Escolha um item disponível e acompanhe seus empréstimos em um só lugar." },
-  { number: "03", symbol: "↗", title: "Devolva com facilidade", description: "Registre a devolução e ajude o próximo colega a encontrar o item." },
+const steps: { number: string; icon: IconName; title: string; description: string }[] = [
+  { number: "01", icon: "magnifying-glass", title: "Encontre o que precisa", description: "Consulte o catálogo para saber quais equipamentos estão disponíveis." },
+  { number: "02", icon: "plus", title: "Solicite o empréstimo", description: "Escolha um item disponível e acompanhe seus empréstimos em um só lugar." },
+  { number: "03", icon: "hand-arrow-down", title: "Devolva com facilidade", description: "Registre a devolução e ajude o próximo colega a encontrar o item." },
 ];
 
-const rules = [
+const rules: { value?: string; icon?: IconName; title: string; description: string }[] = [
   { value: "03", title: "Itens por pessoa", description: "Até três equipamentos emprestados ao mesmo tempo." },
   { value: "14", title: "Dias para devolver", description: "Prazo padrão de devolução de cada empréstimo." },
-  { value: "!", title: "Atrasos importam", description: "Quem tem item em atraso não pode solicitar outro." },
-  { value: "✳", title: "Manutenção", description: "Itens em manutenção não aparecem como disponíveis." },
+  { icon: "warning", title: "Atrasos importam", description: "Quem tem item em atraso não pode solicitar outro." },
+  { icon: "wrench", title: "Manutenção", description: "Itens em manutenção não aparecem como disponíveis." },
 ];
 
 export default function Home() {
   return (
-    <div className="site-shell" id="inicio">
-      <header className="site-header">
-        <Brand href="#inicio" />
-        <nav className="site-nav" aria-label="Navegação principal">
-          <a href="#como-funciona">Como funciona</a>
-          <a href="#regras">Regras</a>
-          <a href="#operacoes">Operações</a>
-        </nav>
-        <div className="header-actions">
-          <a className="header-link header-status-link" href="#sistema" aria-label="Estado do sistema"><span className="header-status-label">Estado do sistema</span> <span aria-hidden="true">↗</span></a>
-          <Link className="header-login" href="/login">Entrar <span aria-hidden="true">↗</span></Link>
-        </div>
-      </header>
-
-      <main>
-        <section className="hero" aria-labelledby="hero-title">
-          <div className="hero-content">
-            <p className="hero-label"><span className="label-dot" /> EQUIPAMENTOS INTERNOS, SEM COMPLICAÇÃO</p>
-            <h1 id="hero-title">O equipamento certo,<br /><em>na hora certa.</em></h1>
-            <p className="hero-description">Um lugar para descobrir o que está disponível, organizar empréstimos e devolver cada item com tranquilidade.</p>
-            <div className="hero-actions">
-              <a className="button button-primary" href="#como-funciona">Entenda como funciona <span aria-hidden="true">↗</span></a>
-              <a className="text-link" href="#regras">Conheça as regras <span aria-hidden="true">→</span></a>
+    <NocturneRoot>
+      <div className={styles.shell} id="inicio">
+        <header className={styles.header}>
+          <div className={`${styles.wrap} ${styles.headerInner}`}>
+            <a className={styles.brand} href="#inicio" aria-label="EmpresTI, voltar ao início">
+              <span className={styles.brandMark}><Icon name="package" size={16} /></span>
+              EmpresTI
+            </a>
+            <nav className={styles.nav} aria-label="Navegação principal">
+              <a href="#como-funciona">Como funciona</a>
+              <a href="#regras">Regras</a>
+              <a href="#operacoes">Operações</a>
+            </nav>
+            <div className={styles.actions}>
+              <a className={`${ui.btn} ${ui.btnSecondary} ${ui.h34} ${styles.statusLink}`} href="#sistema" aria-label="Estado do sistema">Estado do sistema</a>
+              <Link className={`${ui.btn} ${ui.btnPrimary} ${ui.h34}`} href="/login">Entrar <Icon name="arrow-right" size={15} /></Link>
             </div>
-            <p className="hero-note"><span aria-hidden="true">◎</span> Feito para colaboradores e para o time de Operações.</p>
           </div>
-          <div className="hero-art" aria-hidden="true">
-            <div className="art-grid" /><div className="orbit orbit-one" /><div className="orbit orbit-two" />
-            <div className="equipment-card monitor-card">
-              <div className="monitor-frame"><div className="monitor-screen"><span className="screen-pill" /><span className="screen-line" /><span className="screen-line short" /></div></div>
-              <div className="monitor-neck" /><div className="monitor-base" />
+        </header>
+
+        <main>
+          <section className={styles.hero} aria-labelledby="hero-title">
+            <div className={`${styles.wrap} ${styles.heroInner}`}>
+              <div>
+                <p className={styles.eyebrow}><span className={styles.dot} /> Equipamentos internos, sem complicação</p>
+                <h1 className={styles.title} id="hero-title">O equipamento certo, <em>na hora certa.</em></h1>
+                <p className={styles.lead}>Um lugar para descobrir o que está disponível, organizar empréstimos e devolver cada item com tranquilidade.</p>
+                <div className={styles.heroActions}>
+                  <a className={`${ui.btn} ${ui.btnPrimary} ${ui.h44}`} href="#como-funciona">Entenda como funciona <Icon name="arrow-right" size={16} /></a>
+                  <a className={styles.textLink} href="#regras">Conheça as regras <Icon name="caret-right" size={14} /></a>
+                </div>
+                <p className={styles.note}><Icon name="info" size={16} /> Feito para colaboradores e para o time de Operações.</p>
+              </div>
+
+              <div className={styles.preview} aria-hidden="true">
+                <div className={styles.previewBar}><span>Catálogo</span><span>Exemplo ilustrativo</span></div>
+                <div className={styles.previewRow}>
+                  <span className={styles.previewIcon}><Icon name="laptop" size={18} /></span>
+                  <span className={styles.previewText}><span className={`${styles.bar} ${styles.barLong}`} /><span className={`${styles.bar} ${styles.barShort}`} /></span>
+                  <span className={`${styles.pill} ${styles.pillOk}`}>Disponível</span>
+                </div>
+                <div className={styles.previewRow}>
+                  <span className={styles.previewIcon}><Icon name="monitor" size={18} /></span>
+                  <span className={styles.previewText}><span className={`${styles.bar} ${styles.barLong}`} /><span className={`${styles.bar} ${styles.barShort}`} /></span>
+                  <span className={`${styles.pill} ${styles.pillLoan}`}>Emprestado</span>
+                </div>
+                <div className={styles.previewRow}>
+                  <span className={styles.previewIcon}><Icon name="video-camera" size={18} /></span>
+                  <span className={styles.previewText}><span className={`${styles.bar} ${styles.barLong}`} /><span className={`${styles.bar} ${styles.barShort}`} /></span>
+                  <span className={`${styles.pill} ${styles.pillWarn}`}>Manutenção</span>
+                </div>
+              </div>
             </div>
-            <div className="equipment-card laptop-card">
-              <div className="laptop-screen"><span className="laptop-spark">✳</span><span className="laptop-line" /><span className="laptop-line short" /></div>
-              <div className="laptop-base" />
+          </section>
+
+          <div className={styles.strip} aria-label="Benefícios do sistema">
+            <span>Menos planilhas</span><span>Mais clareza</span><span>Tudo no mesmo lugar</span>
+          </div>
+          <hr className={styles.rule} />
+
+          <section className={`${styles.wrap} ${styles.section}`} id="como-funciona" aria-labelledby="how-title">
+            <div className={styles.sectionHead}>
+              <div>
+                <p className={styles.eyebrow}>Simples do início ao fim</p>
+                <h2 className={styles.sectionTitle} id="how-title">Emprestar e devolver <em>sem perder o controle.</em></h2>
+              </div>
+              <p className={styles.sectionText}>Um caminho claro para quem precisa de um equipamento e para quem cuida de cada devolução.</p>
             </div>
-            <div className="floating-tag available-tag"><span className="tag-dot" /> Equipamentos à disposição</div>
-            <div className="floating-tag loan-tag"><span>↗</span> Empréstimos organizados</div>
-            <div className="art-spark spark-one">✳</div><div className="art-spark spark-two">✳</div>
+            <div className={styles.grid3}>
+              {steps.map((step) => (
+                <article className={styles.card} key={step.number}>
+                  <div className={styles.cardTop}>
+                    <span className={styles.cardIcon} aria-hidden="true"><Icon name={step.icon} size={20} /></span>
+                    <span className={styles.cardIndex}>{step.number} / 03</span>
+                  </div>
+                  <h3 className={styles.cardTitle}>{step.title}</h3>
+                  <p className={styles.cardText}>{step.description}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+
+          <hr className={styles.rule} />
+
+          <section className={`${styles.wrap} ${styles.section}`} id="regras" aria-labelledby="rules-title">
+            <div className={styles.sectionHead}>
+              <div>
+                <p className={styles.eyebrow}>Combinados que ajudam todo mundo</p>
+                <h2 className={styles.sectionTitle} id="rules-title">Regras claras. <em>Uso melhor.</em></h2>
+              </div>
+              <p className={styles.sectionText}>Os equipamentos circulam melhor quando todo mundo sabe como funciona.</p>
+            </div>
+            <div className={styles.grid4}>
+              {rules.map((rule) => (
+                <article className={styles.card} key={rule.title}>
+                  <span className={`${styles.ruleValue} ${rule.icon ? styles.icon : ""}`} aria-hidden="true">
+                    {rule.icon ? <Icon name={rule.icon} size={26} /> : rule.value}
+                  </span>
+                  <h3 className={styles.cardTitle}>{rule.title}</h3>
+                  <p className={styles.cardText}>{rule.description}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+
+          <hr className={styles.rule} />
+
+          <section className={`${styles.wrap} ${styles.section}`} id="operacoes" aria-labelledby="operations-title">
+            <div className={styles.split}>
+              <div>
+                <p className={styles.eyebrow}>Para quem faz acontecer</p>
+                <h2 className={styles.sectionTitle} id="operations-title">Operações também <em>ganha tempo.</em></h2>
+                <p className={styles.sectionText}>Uma visão dos empréstimos em aberto ajuda o time a acompanhar equipamentos e registrar devoluções no balcão.</p>
+              </div>
+              <div className={styles.table} aria-hidden="true">
+                <div className={styles.tableHead}><span>Colaborador</span><span>Item</span><span>Situação</span></div>
+                <div className={`${styles.tableRow} ${styles.tableRowLate}`}>
+                  <span className={`${styles.bar} ${styles.barLong}`} /><span className={styles.bar} /><span className={`${styles.pill} ${styles.pillLate}`}>Atraso</span>
+                </div>
+                <div className={styles.tableRow}>
+                  <span className={`${styles.bar} ${styles.barLong}`} /><span className={styles.bar} /><span className={`${styles.pill} ${styles.pillLoan}`}>No prazo</span>
+                </div>
+                <div className={styles.tableRow}>
+                  <span className={`${styles.bar} ${styles.barLong}`} /><span className={styles.bar} /><span className={`${styles.pill} ${styles.pillLoan}`}>No prazo</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section className={`${styles.wrap} ${styles.system}`} id="sistema" aria-labelledby="system-title">
+            <div>
+              <p className={styles.eyebrow}>Estado da aplicação</p>
+              <h2 className={styles.systemTitle} id="system-title">Por trás de tudo, uma base pronta para crescer.</h2>
+              <p className={styles.systemText}>Esta página verifica a comunicação da aplicação com o PostgreSQL.</p>
+            </div>
+            <HealthStatus />
+          </section>
+        </main>
+
+        <footer className={styles.footer}>
+          <div className={`${styles.wrap} ${styles.footerInner}`}>
+            <a className={styles.brand} href="#inicio" aria-label="EmpresTI, voltar ao início">
+              <span className={styles.brandMark}><Icon name="package" size={16} /></span>
+              EmpresTI
+            </a>
+            <p>Empréstimo de equipamentos internos.</p>
+            <a className={styles.textLink} href="#inicio">Voltar ao início <Icon name="arrow-up-right" size={14} /></a>
           </div>
-        </section>
-
-        <div className="promise-strip" aria-label="Benefícios do sistema">
-          <span>Menos planilhas</span><i aria-hidden="true">✳</i><span>Mais clareza</span><i aria-hidden="true">✳</i><span>Tudo no mesmo lugar</span>
-        </div>
-
-        <section className="section how-section" id="como-funciona" aria-labelledby="how-title">
-          <div className="section-heading">
-            <div><p className="eyebrow">SIMPLES DO INÍCIO AO FIM</p><h2 id="how-title">Emprestar e devolver<br /><em>sem perder o controle.</em></h2></div>
-            <p>Um caminho claro para quem precisa de um equipamento e para quem cuida de cada devolução.</p>
-          </div>
-          <div className="steps-grid">
-            {steps.map((step) => <article className="step-card" key={step.number}>
-              <div className="step-top"><span className="step-icon" aria-hidden="true">{step.symbol}</span><span className="step-number">{step.number} / 03</span></div>
-              <h3>{step.title}</h3><p>{step.description}</p>
-            </article>)}
-          </div>
-        </section>
-
-        <section className="section rules-section" id="regras" aria-labelledby="rules-title">
-          <div className="rules-intro"><p className="eyebrow">COMBINADOS QUE AJUDAM TODO MUNDO</p><h2 id="rules-title">Regras claras.<br /><em>Uso melhor.</em></h2><p>Os equipamentos circulam melhor quando todo mundo sabe como funciona.</p></div>
-          <div className="rules-grid">
-            {rules.map((rule) => <article className="rule-card" key={rule.title}>
-              <span className="rule-value" aria-hidden="true">{rule.value}</span><h3>{rule.title}</h3><p>{rule.description}</p>
-            </article>)}
-          </div>
-        </section>
-
-        <section className="section closing-section" id="operacoes" aria-labelledby="operations-title">
-          <div className="closing-copy"><p className="eyebrow">PARA QUEM FAZ ACONTECER</p><h2 id="operations-title">Operações também<br /><em>ganha tempo.</em></h2><p>Uma visão dos empréstimos em aberto ajuda o time a acompanhar equipamentos e registrar devoluções no balcão.</p></div>
-          <div className="closing-illustration" aria-hidden="true">
-            <div className="illustration-sheet"><span className="sheet-heading" /><span className="sheet-row"><i /><b /><em /></span><span className="sheet-row"><i /><b /><em /></span><span className="sheet-row"><i /><b /><em /></span></div>
-            <div className="illustration-check">✓</div>
-          </div>
-        </section>
-
-        <section className="system-section" id="sistema" aria-labelledby="system-title">
-          <div><p className="eyebrow">ESTADO DA APLICAÇÃO</p><h2 id="system-title">Por trás de tudo, uma base pronta para crescer.</h2><p>Esta página verifica a comunicação da aplicação com o PostgreSQL.</p></div>
-          <HealthStatus />
-        </section>
-      </main>
-
-      <footer className="site-footer">
-        <Brand href="#inicio" />
-        <p>Empréstimo de equipamentos internos.</p>
-        <a href="#inicio">Voltar ao início ↑</a>
-      </footer>
-    </div>
+        </footer>
+      </div>
+    </NocturneRoot>
   );
 }

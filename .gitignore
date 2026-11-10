@@ -10,6 +10,10 @@ out/
 .env.local
 .env.*.local
 
+# Skill imagens-equipamentos: cache da API e candidatos (regeneraveis)
+data/imagens/.cache/
+data/imagens/candidatos.json
+
 # Test coverage
 coverage/
 *.tsbuildinfo

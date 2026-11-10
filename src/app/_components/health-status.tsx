@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 
+import styles from "../home.module.css";
+
 type HealthResponse = {
   status: "ok" | "error";
   database: "connected" | "unavailable";
@@ -41,14 +43,14 @@ export function HealthStatus() {
   }, []);
 
   if (!health) {
-    return <p className="status statusLoading" role="status">Verificando a conexão com o PostgreSQL...</p>;
+    return <p className={styles.status} role="status">Verificando a conexão com o PostgreSQL...</p>;
   }
 
   const connected = health.status === "ok";
 
   return (
-    <div className={`status ${connected ? "statusOk" : "statusError"}`} role="status">
-      <span className="statusDot" aria-hidden="true" />
+    <div className={`${styles.status} ${connected ? styles.statusOk : styles.statusError}`} role="status">
+      <span className={styles.statusDot} aria-hidden="true" />
       <div>
         <strong>{connected ? "Sistema disponível" : "Sistema indisponível"}</strong>
         <p>
