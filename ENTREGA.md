@@ -1,8 +1,9 @@
 # Entrega da prática
 
 ## Links
-- Repositório (turma REST: back e front):
-- Produção (Vercel):
+- Repositório (monólito Next.js full-stack, conforme o ADR-001; não há repositório separado de back e front):
+  https://github.com/GuilhermeSouza122/emprestimo_equipamento (tag `entrega-pratica`)
+- Produção (Vercel): https://emprestimo-equipamento.vercel.app
 
 ## 1. Conflitos: o que foi pedido contra o que já existia
 Todo pedido desta prática (briefings, requisitos, pedidos do time)
@@ -226,6 +227,18 @@ comportamento foi reprovado. Resumo das tabelas devolvidas:
 - **Aberto, só o que depende do usuário:** push, migrations e seed no deploy, variáveis na Vercel, tag
   `entrega-pratica` e a conferência final em produção (seção 7 do enunciado).
 
+### Publicação em produção (feita pelo usuário, nunca pelo agente)
+- Banco: PostgreSQL do projeto Supabase (região us-west-2). O usuário aplicou as 4 migrations com `npm run db:deploy`
+  e rodou o seed com `--producao` (12 equipamentos, conta do professor e conta de teste). Imagens: bucket público
+  `equipamentos` do mesmo projeto, com as 12 conferidas por `sha256` (`conferir-remoto.mjs`).
+- Variáveis na Vercel: `DATABASE_URL`, `SESSION_SECRET` e `EQUIPAMENTOS_IMAGENS_BASE_URL`, definidas pelo usuário
+  (nenhuma está no código nem no git).
+- Dois problemas reais que só apareceram em produção: (1) o seed estourou o tempo da transação (`P2028`) porque o banco
+  remoto tem latência alta; corrigido aumentando o limite (commit `124e986`), também na transação de solicitar;
+  (2) as páginas falharam com `EMAXCONNSESSION` no Session pooler (porta 5432, limite de 15 conexões); a correção foi usar na
+  Vercel o Transaction pooler (porta 6543, `pgbouncer=true&connection_limit=1`), sem mudar código. O login em produção
+  funcionou depois disso (confirmado pelo usuário).
+
 ## 7. Uma regra sua que esta prática pôs à prova
 **`rules/spec-flow.md` não exigia nenhuma verificação independente.** Ela mandava implementar,
 testar e entregar; nada impedia o mesmo agente de implementar e declarar a spec pronta. A
@@ -276,3 +289,8 @@ Outros pontos que a prática expôs, sem mudar a rule ainda:
 - Criar o subagente verificador em uma sessão anterior ao uso, porque agentes só carregam no início.
 - Subir o banco local no começo. Descobrir o Docker desligado atrasou os testes.
 - Escrever a spec de autenticação junto com a de dados iniciais, já que uma depende da outra.
+- Configurar a `DATABASE_URL` da Vercel desde o início com o Transaction pooler (6543) e `connection_limit=1`, e testar
+  o seed contra um banco remoto antes de chegar ao deploy: dois erros de produção vieram só da latência e do limite de
+  conexões, que o banco local não mostra.
+- Rodar o verificador sem `next dev` aberto e sem sincronização do OneDrive disputando `.next`: o build falhou duas vezes
+  por isso.
